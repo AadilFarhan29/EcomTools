@@ -1,226 +1,811 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Marketplace Calculators</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Freewill Tools — Marketplace Calculators</title>
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+  <style>
+    :root{
+      --bg0:#05070b;
+      --bg1:#070b12;
+      --card: rgba(16, 23, 38, 0.68);
+      --card2: rgba(10, 14, 24, 0.70);
+      --stroke: rgba(255,255,255,0.10);
+      --stroke2: rgba(255,255,255,0.14);
+      --text:#e8eefc;
+      --muted:#a8b3cf;
+      --muted2:#7f8aa8;
 
-        body {
-            font-family: "Inter", "Segoe UI", Arial, sans-serif;
-            min-height: 100vh;
-            padding: 40px;
-            background: linear-gradient(
-                135deg,
-                #0f2027,
-                #203a43,
-                #2c5364
-            );
-            color: #e5e7eb;
-        }
+      --blue:#5aa7ff;
+      --cyan:#38bdf8;
+      --green:#4ade80;
+      --red:#fb7185;
 
-        .container {
-            max-width: 1000px;
-            margin: auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
-            gap: 30px;
-        }
+      --shadow: 0 18px 55px rgba(0,0,0,0.55);
+      --shadow2: 0 10px 30px rgba(0,0,0,0.45);
+      --radius: 18px;
+      --radius2: 14px;
 
-        /* DARKER CARD BACKGROUND */
-        .box {
-            background: rgba(30, 41, 59, 0.92);
-            padding: 28px;
-            border-radius: 18px;
-            box-shadow:
-                0 12px 30px rgba(0, 0, 0, 0.45),
-                inset 0 1px 0 rgba(255, 255, 255, 0.04);
-            transition: transform 0.25s ease, box-shadow 0.25s ease;
-        }
+      /* Premium alignment controls */
+      --control-h: 48px;
+      --gap: 10px;
+    }
 
-        .box:hover {
-            transform: translateY(-4px);
-            box-shadow:
-                0 20px 45px rgba(0, 0, 0, 0.6),
-                inset 0 1px 0 rgba(255, 255, 255, 0.05);
-        }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 700px at 20% -10%, rgba(90,167,255,0.22), transparent 55%),
+        radial-gradient(900px 600px at 110% 10%, rgba(56,189,248,0.18), transparent 60%),
+        radial-gradient(900px 700px at 40% 120%, rgba(74,222,128,0.10), transparent 60%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow-x:hidden;
+    }
 
-        h3 {
-            margin: 0 0 20px;
-            font-size: 20px;
-            font-weight: 600;
-            color: #f8fafc;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding-bottom: 10px;
-        }
+    .wrap{
+      max-width: 1060px;
+      margin: 0 auto;
+      padding: 34px 18px 42px;
+    }
 
-        label {
-            font-size: 13px;
-            font-weight: 500;
-            color: #cbd5f5;
-            display: block;
-            margin-top: 16px;
-        }
+    /* Top bar */
+    .topbar{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:16px;
+      margin-bottom:18px;
+    }
+    .brand{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      width: fit-content;
+      padding: 6px 10px;
+      border:1px solid var(--stroke);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.04);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: .2px;
+    }
+    .dot{
+      width:8px;height:8px;border-radius:50%;
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      box-shadow: 0 0 0 3px rgba(90,167,255,0.18);
+    }
+    h1{
+      margin: 2px 0 0;
+      font-size: 28px;
+      line-height: 1.15;
+      letter-spacing: -0.4px;
+    }
+    .sub{
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.4;
+    }
 
-        input {
-            width: 100%;
-            padding: 12px 14px;
-            margin-top: 6px;
-            font-size: 14px;
-            border-radius: 10px;
-            border: 1px solid #334155;
-            outline: none;
-            background: #0f172a;
-            color: #e5e7eb;
-            transition: border 0.2s ease, box-shadow 0.2s ease;
-        }
+    .meta{
+      text-align:right;
+      color: var(--muted2);
+      font-size: 12px;
+      line-height:1.4;
+      user-select:none;
+    }
+    .meta strong{color: var(--text); font-weight:600;}
 
-        input::placeholder {
-            color: #64748b;
-        }
+    /* Main card */
+    .card{
+      border: 1px solid var(--stroke);
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+      overflow:hidden;
+    }
 
-        input:focus {
-            border-color: #60a5fa;
-            box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.25);
-            background: #020617;
-        }
+    .card-header{
+      padding: 16px 16px 0;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      flex-wrap:wrap;
+    }
 
-        button {
-            width: 100%;
-            padding: 14px;
-            margin-top: 22px;
-            font-size: 15px;
-            font-weight: 600;
-            color: #020617;
-            background: linear-gradient(135deg, #60a5fa, #38bdf8);
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            letter-spacing: 0.3px;
-            transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s;
-        }
+    /* Tabs */
+    .tabs{
+      display:flex;
+      gap:8px;
+      padding: 10px;
+      border-radius: 999px;
+      border:1px solid var(--stroke);
+      background: rgba(0,0,0,0.25);
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow2);
+    }
+    .tab{
+      appearance:none;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--muted);
+      padding: 10px 12px;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 13px;
+      letter-spacing: 0.2px;
+      cursor: pointer;
+      transition: transform .15s ease, background .2s ease, border .2s ease, color .2s ease;
+      user-select:none;
+    }
+    .tab:hover{transform: translateY(-1px); color: var(--text);}
+    .tab.active{
+      color: #04121f;
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      border-color: rgba(255,255,255,0.25);
+      box-shadow: 0 14px 30px rgba(56,189,248,0.20);
+    }
 
-        button:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 10px 22px rgba(56, 189, 248, 0.45);
-            opacity: 0.95;
-        }
+    .actions{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      color: var(--muted2);
+      font-size: 12px;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--stroke);
+      background: rgba(0,0,0,0.20);
+      user-select:none;
+    }
+    .kbd{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      padding: 2px 6px;
+      border:1px solid var(--stroke);
+      border-bottom-color: rgba(255,255,255,0.18);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.06);
+      color: var(--muted);
+      font-size: 11px;
+    }
 
-        button:active {
-            transform: translateY(0);
-            box-shadow: 0 6px 14px rgba(56, 189, 248, 0.35);
-        }
+    .card-body{
+      display:grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 14px;
+      padding: 14px;
+    }
+    @media (max-width: 900px){
+      .card-body{grid-template-columns: 1fr;}
+      .meta{text-align:left}
+    }
 
-        .result {
-            margin-top: 22px;
-            font-size: 14px;
-            line-height: 1.7;
-            background: #020617;
-            color: #e5e7eb;
-            padding: 16px;
-            border-radius: 12px;
-            border-left: 4px solid #60a5fa;
-        }
+    .panel{
+      background: var(--card);
+      border: 1px solid var(--stroke);
+      border-radius: var(--radius2);
+      padding: 14px;
+      box-shadow: var(--shadow2);
+      backdrop-filter: blur(12px);
+    }
 
-        .profit {
-            color: #4ade80;
-            font-weight: 700;
-        }
+    .panel-title{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      margin-bottom: 12px;
+    }
+    .panel-title h2{
+      margin:0;
+      font-size: 15px;
+      letter-spacing: -0.2px;
+    }
+    .hint{
+      color: var(--muted2);
+      font-size: 12px;
+    }
 
-        .loss {
-            color: #f87171;
-            font-weight: 700;
-        }
-    </style>
+    /* Form */
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--gap);
+    }
+    @media (max-width: 520px){
+      .grid{grid-template-columns:1fr;}
+    }
+
+    label{
+      display:block;
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 600;
+      margin-bottom: 6px;
+      letter-spacing: .15px;
+    }
+
+    .field{
+      position: relative;
+    }
+
+    /* Premium: consistent control height + right padding for AED badge */
+    input{
+      width:100%;
+      height: var(--control-h);
+      padding: 12px 58px 12px 12px; /* right space for AED */
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(0,0,0,0.35);
+      color: var(--text);
+      outline: none;
+      font-size: 14px;
+      transition: border .18s ease, box-shadow .18s ease, transform .15s ease;
+    }
+    input::placeholder{color: rgba(168,179,207,0.55)}
+    input:focus{
+      border-color: rgba(90,167,255,0.55);
+      box-shadow: 0 0 0 4px rgba(90,167,255,0.18);
+    }
+
+    /* Premium: true vertical centering for suffix */
+    .suffix{
+      position:absolute;
+      right: 10px;
+      top: calc(50% + 12px);
+      transform: translateY(-50%);
+      height: 24px;
+      display:flex;
+      align-items:center;
+      padding: 0 8px;
+      color: rgba(168,179,207,0.70);
+      font-size: 12px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.05);
+      border-radius: 999px;
+      pointer-events:none;
+    }
+
+    /* Premium: buttons align with input grid */
+    .btnrow{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--gap);
+      margin-top: 14px;
+    }
+    @media (max-width: 520px){
+      .btnrow{grid-template-columns: 1fr;}
+    }
+
+    .btn{
+      width: 100%;
+      height: var(--control-h);
+      border: none;
+      border-radius: 14px;
+      padding: 0 14px;
+      font-weight: 800;
+      letter-spacing: .2px;
+      cursor:pointer;
+      transition: transform .15s ease, box-shadow .2s ease, filter .2s ease;
+      user-select:none;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .btn-primary{
+      color: #04121f;
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      box-shadow: 0 16px 35px rgba(56,189,248,0.18);
+    }
+    .btn-primary:hover{transform: translateY(-1px); filter: brightness(1.02);}
+    .btn-primary:active{transform: translateY(0px);}
+
+    .btn-ghost{
+      color: var(--muted);
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.10);
+    }
+    .btn-ghost:hover{transform: translateY(-1px); color: var(--text);}
+
+    /* Receipt */
+    .receipt{
+      background: linear-gradient(180deg, rgba(0,0,0,0.40), rgba(0,0,0,0.22));
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 14px;
+      padding: 14px;
+      min-height: 140px;
+      position: relative;
+      overflow:hidden;
+    }
+    .receipt::before{
+      content:"";
+      position:absolute; inset:-2px;
+      background: radial-gradient(420px 180px at 10% 0%, rgba(90,167,255,0.22), transparent 55%),
+                  radial-gradient(320px 200px at 90% 10%, rgba(56,189,248,0.14), transparent 60%);
+      pointer-events:none;
+      opacity: .65;
+    }
+    .receipt > *{position:relative}
+
+    .row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding: 8px 0;
+      border-bottom: 1px dashed rgba(255,255,255,0.10);
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .row:last-child{border-bottom:none}
+    .row strong{color: var(--text); font-weight:700}
+
+    .divider{
+      height:1px;
+      background: rgba(255,255,255,0.10);
+      margin: 10px 0;
+    }
+
+    .profitline{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap: 12px;
+      margin-top: 8px;
+    }
+    .profitline .label{
+      color: var(--muted);
+      font-weight: 700;
+      letter-spacing: .2px;
+    }
+    .amount{
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: -0.6px;
+      line-height: 1;
+    }
+    .good{color: var(--green)}
+    .bad{color: var(--red)}
+
+    .note{
+      margin-top:10px;
+      color: rgba(168,179,207,0.75);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    /* Collapsible assumptions */
+    details{
+      margin-top: 18px; /* Premium: breathing room */
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.03);
+      border-radius: 14px;
+      overflow:hidden;
+    }
+    summary{
+      list-style:none;
+      cursor:pointer;
+      padding: 12px 12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      color: var(--muted);
+      font-weight: 700;
+      user-select:none;
+    }
+    summary::-webkit-details-marker{display:none}
+    .chev{
+      width:10px;height:10px;
+      border-right:2px solid rgba(168,179,207,0.75);
+      border-bottom:2px solid rgba(168,179,207,0.75);
+      transform: rotate(45deg);
+      transition: transform .2s ease;
+    }
+    details[open] .chev{transform: rotate(225deg);}
+    .assump{
+      padding: 0 12px 12px;
+    }
+    .assump .grid{margin-top: 6px}
+
+    /* Footer */
+    .footer{
+      margin-top: 14px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      color: rgba(168,179,207,0.65);
+      font-size: 12px;
+      padding: 0 6px;
+    }
+    .ver{
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.04);
+      padding: 6px 10px;
+      border-radius: 999px;
+    }
+
+    /* Toast */
+    .toast{
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%) translateY(20px);
+      opacity: 0;
+      pointer-events:none;
+      transition: opacity .18s ease, transform .18s ease;
+      background: rgba(0,0,0,0.55);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 999px;
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow2);
+      font-size: 13px;
+    }
+    .toast.show{
+      opacity: 1;
+      transform: translateX(-50%) translateY(0px);
+    }
+  </style>
 </head>
 
 <body>
-
-<div class="container">
-
-    <!-- AMAZON CALCULATOR -->
-    <div class="box">
-        <h3>Amazon Profit Calculator</h3>
-
-        <label>Cost Price (CP)</label>
-        <input type="number" id="amz_cp">
-
-        <label>Selling Price (SP)</label>
-        <input type="number" id="amz_sp">
-
-        <button onclick="calculateAmazon()">Calculate</button>
-
-        <div class="result" id="amz_output"></div>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <div class="badge"><span class="dot"></span> Freewill Tools</div>
+        <h1>Marketplace Calculators</h1>
+        <p class="sub">Fast pricing decisions for Amazon & Noon — with clear assumptions and clean math.</p>
+      </div>
+      <div class="meta">
+        <div><strong>Tip:</strong> Press <span class="kbd">Enter</span> to calculate</div>
+        <div style="margin-top:6px;">Currency: <strong>AED</strong></div>
+      </div>
     </div>
 
-    <!-- NOON CALCULATOR -->
-    <div class="box">
-        <h3>Noon Deal Price Calculator</h3>
+    <div class="card" role="application" aria-label="Marketplace calculators">
+      <div class="card-header">
+        <div class="tabs" role="tablist" aria-label="Calculator tabs">
+          <button class="tab active" id="tab-amz" role="tab" aria-selected="true" aria-controls="pane-amz">Amazon</button>
+          <button class="tab" id="tab-noon" role="tab" aria-selected="false" aria-controls="pane-noon">Noon Deals</button>
+        </div>
+        <div class="actions">
+          <div class="pill">Delivery defaults to <strong style="color:var(--text)">&nbsp;AED</strong>&nbsp;<span id="pillDelivery">11</span></div>
+          <div class="pill">VAT <span id="pillVat">5</span>%</div>
+        </div>
+      </div>
 
-        <label>Original Price</label>
-        <input type="number" id="noon_price">
+      <div class="card-body">
 
-        <label>Discount %</label>
-        <input type="number" id="noon_discount">
+        <!-- LEFT: Inputs -->
+        <div class="panel">
+          <div class="panel-title">
+            <h2 id="formTitle">Amazon Profit</h2>
+            <div class="hint" id="formHint">Enter CP & SP. Fee auto-applies by SP.</div>
+          </div>
 
-        <button onclick="calculateNoon()">Calculate</button>
+          <!-- AMAZON PANE -->
+          <div id="pane-amz" role="tabpanel" aria-labelledby="tab-amz">
+            <div class="grid">
+              <div class="field">
+                <label for="amz_cp">Cost Price (CP)</label>
+                <input type="number" inputmode="decimal" id="amz_cp" placeholder="e.g. 100" />
+                <span class="suffix">AED</span>
+              </div>
 
-        <div class="result" id="noon_output"></div>
+              <div class="field">
+                <label for="amz_sp">Selling Price (SP)</label>
+                <input type="number" inputmode="decimal" id="amz_sp" placeholder="e.g. 147" />
+                <span class="suffix">AED</span>
+              </div>
+            </div>
+
+            <div class="btnrow">
+              <button class="btn btn-primary" id="btnAmz">Calculate</button>
+              <button class="btn btn-ghost" id="btnAmzClear" type="button">Clear</button>
+            </div>
+
+            <details>
+              <summary>
+                Assumptions (editable)
+                <span class="chev" aria-hidden="true"></span>
+              </summary>
+              <div class="assump">
+                <div class="grid">
+                  <div class="field">
+                    <label for="vat_rate">VAT %</label>
+                    <input type="number" inputmode="decimal" id="vat_rate" placeholder="5" />
+                  </div>
+                  <div class="field">
+                    <label for="delivery_fee">Delivery Fee</label>
+                    <input type="number" inputmode="decimal" id="delivery_fee" placeholder="11" />
+                    <span class="suffix">AED</span>
+                  </div>
+                  <div class="field">
+                    <label for="fee_threshold">Fee threshold (SP ≤)</label>
+                    <input type="number" inputmode="decimal" id="fee_threshold" placeholder="50" />
+                    <span class="suffix">AED</span>
+                  </div>
+                  <div class="field">
+                    <label for="fee_low">Fee % (≤ threshold)</label>
+                    <input type="number" inputmode="decimal" id="fee_low" placeholder="8" />
+                  </div>
+                  <div class="field">
+                    <label for="fee_high">Fee % (> threshold)</label>
+                    <input type="number" inputmode="decimal" id="fee_high" placeholder="15" />
+                  </div>
+                </div>
+
+                <p class="note">
+                  These defaults match your current calculator. Change them if your category fees or delivery costs differ.
+                  Settings are saved in your browser.
+                </p>
+              </div>
+            </details>
+          </div>
+
+          <!-- NOON PANE -->
+          <div id="pane-noon" role="tabpanel" aria-labelledby="tab-noon" style="display:none;">
+            <div class="grid">
+              <div class="field">
+                <label for="noon_price">Original Price</label>
+                <input type="number" inputmode="decimal" id="noon_price" placeholder="e.g. 199" />
+                <span class="suffix">AED</span>
+              </div>
+
+              <div class="field">
+                <label for="noon_discount">Discount %</label>
+                <input type="number" inputmode="decimal" id="noon_discount" placeholder="e.g. 15" />
+              </div>
+            </div>
+
+            <div class="btnrow">
+              <button class="btn btn-primary" id="btnNoon">Calculate</button>
+              <button class="btn btn-ghost" id="btnNoonClear" type="button">Clear</button>
+            </div>
+
+            <p class="note">
+              This calculates the deal price after discount. If you want Noon commission + fulfilment fees later,
+              we can add a “Net Profit” mode.
+            </p>
+          </div>
+        </div>
+
+        <!-- RIGHT: Output -->
+        <div class="panel">
+          <div class="panel-title">
+            <h2>Result</h2>
+            <div class="hint" id="resultHint">Shows a clean breakdown.</div>
+          </div>
+
+          <div class="receipt" id="output">
+            <div class="row"><span>Ready.</span><strong>Enter values and calculate</strong></div>
+            <div class="note">Your results will appear here with a receipt-style breakdown.</div>
+          </div>
+
+          <div class="footer">
+            <div class="ver">v1.0 • Freewill UAE</div>
+            <div>Built for speed, not guesswork.</div>
+          </div>
+        </div>
+
+      </div>
     </div>
+  </div>
 
-</div>
-<script>
-function calculateAmazon() {
-    let cp = parseFloat(document.getElementById("amz_cp").value);
-    let sp = parseFloat(document.getElementById("amz_sp").value);
+  <div class="toast" id="toast">Saved</div>
 
-    if (isNaN(cp) || isNaN(sp)) {
-        document.getElementById("amz_output").innerHTML = "Enter valid numbers.";
-        return;
+  <script>
+    // ---- Helpers
+    const fmt = (n) => Number(n).toFixed(2);
+    const $ = (id) => document.getElementById(id);
+
+    const toast = (() => {
+      let t;
+      return (msg) => {
+        const el = $("toast");
+        el.textContent = msg;
+        el.classList.add("show");
+        clearTimeout(t);
+        t = setTimeout(() => el.classList.remove("show"), 1400);
+      };
+    })();
+
+    // ---- Persisted settings (localStorage)
+    const DEFAULTS = {
+      vat_rate: 5,
+      delivery_fee: 11,
+      fee_threshold: 50,
+      fee_low: 8,
+      fee_high: 15
+    };
+
+    function loadSettings() {
+      const saved = JSON.parse(localStorage.getItem("freewill_ecomtools_settings") || "null");
+      const s = { ...DEFAULTS, ...(saved || {}) };
+      $("vat_rate").value = s.vat_rate;
+      $("delivery_fee").value = s.delivery_fee;
+      $("fee_threshold").value = s.fee_threshold;
+      $("fee_low").value = s.fee_low;
+      $("fee_high").value = s.fee_high;
+
+      $("pillVat").textContent = s.vat_rate;
+      $("pillDelivery").textContent = s.delivery_fee;
+
+      return s;
     }
 
-    let cpWithVat = cp * 1.05;
-    let delivery = 11;
-
-    // ✅ Fee based on SELLING PRICE
-    let feeRate = sp <= 50 ? 0.08 : 0.15;
-    let amazonFee = sp * feeRate;
-
-    let profit = sp - cpWithVat - delivery - amazonFee;
-
-    document.getElementById("amz_output").innerHTML = `
-        CP with VAT: ${cpWithVat.toFixed(2)}<br>
-        Delivery: 11.00<br>
-        Amazon Fee (${feeRate * 100}%): ${amazonFee.toFixed(2)}<br><br>
-        Profit:
-        <span class="${profit >= 0 ? 'profit' : 'loss'}">
-            ${profit.toFixed(2)}
-        </span>
-    `;
-}
-
-
-
-function calculateNoon() {
-    let price = parseFloat(document.getElementById("noon_price").value);
-    let discount = parseFloat(document.getElementById("noon_discount").value);
-
-    if (isNaN(price) || isNaN(discount)) {
-        document.getElementById("noon_output").innerHTML = "Enter valid numbers.";
-        return;
+    function saveSettings() {
+      const s = getSettings();
+      localStorage.setItem("freewill_ecomtools_settings", JSON.stringify(s));
+      $("pillVat").textContent = s.vat_rate;
+      $("pillDelivery").textContent = s.delivery_fee;
+      toast("Assumptions saved");
     }
 
-    let dealPrice = price - (price * discount / 100);
+    function getSettings() {
+      const num = (v, d) => (isNaN(parseFloat(v)) ? d : parseFloat(v));
+      return {
+        vat_rate: num($("vat_rate").value, DEFAULTS.vat_rate),
+        delivery_fee: num($("delivery_fee").value, DEFAULTS.delivery_fee),
+        fee_threshold: num($("fee_threshold").value, DEFAULTS.fee_threshold),
+        fee_low: num($("fee_low").value, DEFAULTS.fee_low),
+        fee_high: num($("fee_high").value, DEFAULTS.fee_high),
+      };
+    }
 
-    document.getElementById("noon_output").innerHTML = `
-        Deal Price After Discount:
-        <strong>${dealPrice.toFixed(2)}</strong>
-    `;
-}
-</script>
+    // Auto-save assumptions on change
+    ["vat_rate","delivery_fee","fee_threshold","fee_low","fee_high"].forEach(id => {
+      $(id).addEventListener("change", saveSettings);
+      $(id).addEventListener("blur", saveSettings);
+    });
 
+    // ---- Tabs
+    function setActive(tab) {
+      const isAmz = tab === "amz";
+
+      $("tab-amz").classList.toggle("active", isAmz);
+      $("tab-amz").setAttribute("aria-selected", isAmz ? "true" : "false");
+      $("pane-amz").style.display = isAmz ? "" : "none";
+
+      $("tab-noon").classList.toggle("active", !isAmz);
+      $("tab-noon").setAttribute("aria-selected", !isAmz ? "true" : "false");
+      $("pane-noon").style.display = !isAmz ? "" : "none";
+
+      $("formTitle").textContent = isAmz ? "Amazon Profit" : "Noon Deal Price";
+      $("formHint").textContent  = isAmz ? "Enter CP & SP. Fee auto-applies by SP." : "Enter original price and discount %.";
+      $("resultHint").textContent = isAmz ? "Shows VAT, delivery, fee, and net profit." : "Shows deal price after discount.";
+
+      // friendly output reset on tab switch
+      $("output").innerHTML = `
+        <div class="row"><span>Ready.</span><strong>${isAmz ? "Amazon breakdown" : "Noon deal price"}</strong></div>
+        <div class="note">Enter values and calculate.</div>
+      `;
+    }
+
+    $("tab-amz").addEventListener("click", () => setActive("amz"));
+    $("tab-noon").addEventListener("click", () => setActive("noon"));
+
+    // ---- Calculations
+    function calculateAmazon() {
+      const cp = parseFloat($("amz_cp").value);
+      const sp = parseFloat($("amz_sp").value);
+
+      if (isNaN(cp) || isNaN(sp)) {
+        $("output").innerHTML = `<div class="row"><span>Input error</span><strong class="bad">Enter valid CP and SP</strong></div>`;
+        return;
+      }
+
+      const s = getSettings();
+
+      const cpWithVat = cp * (1 + (s.vat_rate / 100));
+      const delivery = s.delivery_fee;
+
+      // Fee based on SELLING PRICE
+      const feeRate = (sp <= s.fee_threshold) ? (s.fee_low / 100) : (s.fee_high / 100);
+      const amazonFee = sp * feeRate;
+
+      const profit = sp - cpWithVat - delivery - amazonFee;
+      const profitClass = profit >= 0 ? "good" : "bad";
+
+      $("output").innerHTML = `
+        <div class="row"><span>CP (with VAT)</span><strong>AED ${fmt(cpWithVat)}</strong></div>
+        <div class="row"><span>Delivery</span><strong>AED ${fmt(delivery)}</strong></div>
+        <div class="row"><span>Amazon fee (${(feeRate*100).toFixed(0)}%)</span><strong>AED ${fmt(amazonFee)}</strong></div>
+
+        <div class="divider"></div>
+
+        <div class="profitline">
+          <div class="label">Net Profit</div>
+          <div class="amount ${profitClass}">AED ${fmt(profit)}</div>
+        </div>
+
+        <div class="note">
+          Assumptions: VAT ${s.vat_rate}%, Delivery AED ${s.delivery_fee}, Fee rule: ${s.fee_low}% if SP ≤ AED ${s.fee_threshold}, else ${s.fee_high}%.
+        </div>
+      `;
+    }
+
+    function calculateNoon() {
+      const price = parseFloat($("noon_price").value);
+      const discount = parseFloat($("noon_discount").value);
+
+      if (isNaN(price) || isNaN(discount)) {
+        $("output").innerHTML = `<div class="row"><span>Input error</span><strong class="bad">Enter valid price and discount</strong></div>`;
+        return;
+      }
+
+      const dealPrice = price - (price * discount / 100);
+
+      $("output").innerHTML = `
+        <div class="row"><span>Original Price</span><strong>AED ${fmt(price)}</strong></div>
+        <div class="row"><span>Discount</span><strong>${discount.toFixed(2)}%</strong></div>
+
+        <div class="divider"></div>
+
+        <div class="profitline">
+          <div class="label">Deal Price</div>
+          <div class="amount good">AED ${fmt(dealPrice)}</div>
+        </div>
+
+        <div class="note">
+          If you want: add Noon commission + fulfilment costs to calculate net profit.
+        </div>
+      `;
+    }
+
+    // ---- Buttons
+    $("btnAmz").addEventListener("click", calculateAmazon);
+    $("btnNoon").addEventListener("click", calculateNoon);
+
+    $("btnAmzClear").addEventListener("click", () => {
+      $("amz_cp").value = "";
+      $("amz_sp").value = "";
+      $("output").innerHTML = `<div class="row"><span>Cleared</span><strong>Enter values and calculate</strong></div>`;
+      $("amz_cp").focus();
+    });
+
+    $("btnNoonClear").addEventListener("click", () => {
+      $("noon_price").value = "";
+      $("noon_discount").value = "";
+      $("output").innerHTML = `<div class="row"><span>Cleared</span><strong>Enter values and calculate</strong></div>`;
+      $("noon_price").focus();
+    });
+
+    // ---- Keyboard: Enter to calculate on active tab
+    function handleEnter(e) {
+      if (e.key !== "Enter") return;
+      const amzActive = $("tab-amz").classList.contains("active");
+      if (amzActive) calculateAmazon();
+      else calculateNoon();
+    }
+    document.addEventListener("keydown", handleEnter);
+
+    // ---- Init
+    loadSettings();
+    setActive("amz");
+  </script>
 </body>
 </html>
