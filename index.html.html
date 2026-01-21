@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Marketplace Calculators</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Inter", "Segoe UI", Arial, sans-serif;
+            min-height: 100vh;
+            padding: 40px;
+            background: linear-gradient(
+                135deg,
+                #0f2027,
+                #203a43,
+                #2c5364
+            );
+            color: #e5e7eb;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 30px;
+        }
+
+        /* DARKER CARD BACKGROUND */
+        .box {
+            background: rgba(30, 41, 59, 0.92);
+            padding: 28px;
+            border-radius: 18px;
+            box-shadow:
+                0 12px 30px rgba(0, 0, 0, 0.45),
+                inset 0 1px 0 rgba(255, 255, 255, 0.04);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .box:hover {
+            transform: translateY(-4px);
+            box-shadow:
+                0 20px 45px rgba(0, 0, 0, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+
+        h3 {
+            margin: 0 0 20px;
+            font-size: 20px;
+            font-weight: 600;
+            color: #f8fafc;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 10px;
+        }
+
+        label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #cbd5f5;
+            display: block;
+            margin-top: 16px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 14px;
+            margin-top: 6px;
+            font-size: 14px;
+            border-radius: 10px;
+            border: 1px solid #334155;
+            outline: none;
+            background: #0f172a;
+            color: #e5e7eb;
+            transition: border 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        input::placeholder {
+            color: #64748b;
+        }
+
+        input:focus {
+            border-color: #60a5fa;
+            box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.25);
+            background: #020617;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 22px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #020617;
+            background: linear-gradient(135deg, #60a5fa, #38bdf8);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            letter-spacing: 0.3px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 22px rgba(56, 189, 248, 0.45);
+            opacity: 0.95;
+        }
+
+        button:active {
+            transform: translateY(0);
+            box-shadow: 0 6px 14px rgba(56, 189, 248, 0.35);
+        }
+
+        .result {
+            margin-top: 22px;
+            font-size: 14px;
+            line-height: 1.7;
+            background: #020617;
+            color: #e5e7eb;
+            padding: 16px;
+            border-radius: 12px;
+            border-left: 4px solid #60a5fa;
+        }
+
+        .profit {
+            color: #4ade80;
+            font-weight: 700;
+        }
+
+        .loss {
+            color: #f87171;
+            font-weight: 700;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- AMAZON CALCULATOR -->
+    <div class="box">
+        <h3>Amazon Profit Calculator</h3>
+
+        <label>Cost Price (CP)</label>
+        <input type="number" id="amz_cp">
+
+        <label>Selling Price (SP)</label>
+        <input type="number" id="amz_sp">
+
+        <button onclick="calculateAmazon()">Calculate</button>
+
+        <div class="result" id="amz_output"></div>
+    </div>
+
+    <!-- NOON CALCULATOR -->
+    <div class="box">
+        <h3>Noon Deal Price Calculator</h3>
+
+        <label>Original Price</label>
+        <input type="number" id="noon_price">
+
+        <label>Discount %</label>
+        <input type="number" id="noon_discount">
+
+        <button onclick="calculateNoon()">Calculate</button>
+
+        <div class="result" id="noon_output"></div>
+    </div>
+
+</div>
+<script>
+function calculateAmazon() {
+    let cp = parseFloat(document.getElementById("amz_cp").value);
+    let sp = parseFloat(document.getElementById("amz_sp").value);
+
+    if (isNaN(cp) || isNaN(sp)) {
+        document.getElementById("amz_output").innerHTML = "Enter valid numbers.";
+        return;
+    }
+
+    let cpWithVat = cp * 1.05;
+    let delivery = 11;
+
+    // ✅ Fee based on SELLING PRICE
+    let feeRate = sp <= 50 ? 0.08 : 0.15;
+    let amazonFee = sp * feeRate;
+
+    let profit = sp - cpWithVat - delivery - amazonFee;
+
+    document.getElementById("amz_output").innerHTML = `
+        CP with VAT: ${cpWithVat.toFixed(2)}<br>
+        Delivery: 11.00<br>
+        Amazon Fee (${feeRate * 100}%): ${amazonFee.toFixed(2)}<br><br>
+        Profit:
+        <span class="${profit >= 0 ? 'profit' : 'loss'}">
+            ${profit.toFixed(2)}
+        </span>
+    `;
+}
+
+
+
+function calculateNoon() {
+    let price = parseFloat(document.getElementById("noon_price").value);
+    let discount = parseFloat(document.getElementById("noon_discount").value);
+
+    if (isNaN(price) || isNaN(discount)) {
+        document.getElementById("noon_output").innerHTML = "Enter valid numbers.";
+        return;
+    }
+
+    let dealPrice = price - (price * discount / 100);
+
+    document.getElementById("noon_output").innerHTML = `
+        Deal Price After Discount:
+        <strong>${dealPrice.toFixed(2)}</strong>
+    `;
+}
+</script>
+
+</body>
+</html>
