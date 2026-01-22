@@ -10,9 +10,7 @@
       --bg0:#05070b;
       --bg1:#070b12;
       --card: rgba(16, 23, 38, 0.68);
-      --card2: rgba(10, 14, 24, 0.70);
       --stroke: rgba(255,255,255,0.10);
-      --stroke2: rgba(255,255,255,0.14);
       --text:#e8eefc;
       --muted:#a8b3cf;
       --muted2:#7f8aa8;
@@ -21,13 +19,13 @@
       --cyan:#38bdf8;
       --green:#4ade80;
       --red:#fb7185;
+      --amber:#fbbf24;
 
       --shadow: 0 18px 55px rgba(0,0,0,0.55);
       --shadow2: 0 10px 30px rgba(0,0,0,0.45);
       --radius: 18px;
       --radius2: 14px;
 
-      /* Premium alignment controls */
       --control-h: 48px;
       --gap: 10px;
     }
@@ -47,7 +45,7 @@
     }
 
     .wrap{
-      max-width: 1060px;
+      max-width: 1120px;
       margin: 0 auto;
       padding: 34px 18px 42px;
     }
@@ -64,6 +62,7 @@
       display:flex;
       flex-direction:column;
       gap:6px;
+      max-width: 860px;
     }
     .badge{
       display:inline-flex;
@@ -104,6 +103,7 @@
       font-size: 12px;
       line-height:1.4;
       user-select:none;
+      min-width: 240px;
     }
     .meta strong{color: var(--text); font-weight:600;}
 
@@ -144,12 +144,13 @@
       color: var(--muted);
       padding: 10px 12px;
       border-radius: 999px;
-      font-weight: 600;
+      font-weight: 650;
       font-size: 13px;
       letter-spacing: 0.2px;
       cursor: pointer;
       transition: transform .15s ease, background .2s ease, border .2s ease, color .2s ease;
       user-select:none;
+      white-space: nowrap;
     }
     .tab:hover{transform: translateY(-1px); color: var(--text);}
     .tab.active{
@@ -165,6 +166,7 @@
       gap:10px;
       color: var(--muted2);
       font-size: 12px;
+      flex-wrap: wrap;
     }
     .pill{
       display:inline-flex;
@@ -189,11 +191,11 @@
 
     .card-body{
       display:grid;
-      grid-template-columns: 1.05fr 0.95fr;
+      grid-template-columns: 1.08fr 0.92fr;
       gap: 14px;
       padding: 14px;
     }
-    @media (max-width: 900px){
+    @media (max-width: 980px){
       .card-body{grid-template-columns: 1fr;}
       .meta{text-align:left}
     }
@@ -240,7 +242,7 @@
       display:block;
       font-size: 12px;
       color: var(--muted);
-      font-weight: 600;
+      font-weight: 700;
       margin-bottom: 6px;
       letter-spacing: .15px;
     }
@@ -249,8 +251,7 @@
       position: relative;
     }
 
-    /* Premium: consistent control height + right padding for AED badge */
-    input{
+    input, select{
       width:100%;
       height: var(--control-h);
       padding: 12px 58px 12px 12px; /* right space for AED */
@@ -262,13 +263,13 @@
       font-size: 14px;
       transition: border .18s ease, box-shadow .18s ease, transform .15s ease;
     }
+    select{ padding-right: 12px; } /* no AED suffix on select */
     input::placeholder{color: rgba(168,179,207,0.55)}
-    input:focus{
+    input:focus, select:focus{
       border-color: rgba(90,167,255,0.55);
       box-shadow: 0 0 0 4px rgba(90,167,255,0.18);
     }
 
-    /* Premium: true vertical centering for suffix */
     .suffix{
       position:absolute;
       right: 10px;
@@ -286,7 +287,46 @@
       pointer-events:none;
     }
 
-    /* Premium: buttons align with input grid */
+    /* Subtabs (inside Amazon) */
+    .subtabs{
+      display:flex;
+      gap:8px;
+      margin: 0 0 12px;
+      padding: 8px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,0.10);
+      background: rgba(0,0,0,0.18);
+    }
+    .subtab{
+      appearance:none;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.04);
+      color: var(--muted);
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 12px;
+      cursor:pointer;
+      transition: transform .15s ease, filter .2s ease, background .2s ease, color .2s ease;
+      user-select:none;
+      flex: 1;
+      text-align:center;
+    }
+    .subtab:hover{transform: translateY(-1px); color: var(--text);}
+    .subtab.active{
+      color: #04121f;
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      border-color: rgba(255,255,255,0.25);
+      box-shadow: 0 14px 30px rgba(56,189,248,0.15);
+    }
+    .subtab small{
+      display:block;
+      font-weight: 700;
+      opacity:.75;
+      margin-top: 2px;
+    }
+
+    /* Buttons */
     .btnrow{
       display:grid;
       grid-template-columns: 1fr 1fr;
@@ -303,7 +343,7 @@
       border: none;
       border-radius: 14px;
       padding: 0 14px;
-      font-weight: 800;
+      font-weight: 900;
       letter-spacing: .2px;
       cursor:pointer;
       transition: transform .15s ease, box-shadow .2s ease, filter .2s ease;
@@ -318,8 +358,6 @@
       box-shadow: 0 16px 35px rgba(56,189,248,0.18);
     }
     .btn-primary:hover{transform: translateY(-1px); filter: brightness(1.02);}
-    .btn-primary:active{transform: translateY(0px);}
-
     .btn-ghost{
       color: var(--muted);
       background: rgba(255,255,255,0.05);
@@ -333,7 +371,7 @@
       border: 1px solid rgba(255,255,255,0.10);
       border-radius: 14px;
       padding: 14px;
-      min-height: 140px;
+      min-height: 160px;
       position: relative;
       overflow:hidden;
     }
@@ -358,7 +396,16 @@
       color: var(--muted);
     }
     .row:last-child{border-bottom:none}
-    .row strong{color: var(--text); font-weight:700}
+    .row strong{color: var(--text); font-weight:800}
+    .subrow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding: 6px 0 0;
+      font-size: 12px;
+      color: rgba(168,179,207,0.85);
+    }
 
     .divider{
       height:1px;
@@ -366,37 +413,45 @@
       margin: 10px 0;
     }
 
-    .profitline{
-      display:flex;
-      align-items:flex-end;
-      justify-content:space-between;
-      gap: 12px;
-      margin-top: 8px;
+    .kpis{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
     }
-    .profitline .label{
-      color: var(--muted);
-      font-weight: 700;
-      letter-spacing: .2px;
+    @media (max-width: 520px){ .kpis{grid-template-columns:1fr;} }
+
+    .kpi{
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.03);
+      border-radius: 14px;
+      padding: 10px 12px;
     }
-    .amount{
-      font-size: 26px;
-      font-weight: 900;
-      letter-spacing: -0.6px;
-      line-height: 1;
+    .kpi .klabel{
+      color: rgba(168,179,207,0.78);
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .kpi .kval{
+      margin-top: 6px;
+      font-size: 18px;
+      font-weight: 950;
+      letter-spacing: -0.2px;
     }
     .good{color: var(--green)}
     .bad{color: var(--red)}
+    .warn{color: var(--amber)}
 
     .note{
       margin-top:10px;
       color: rgba(168,179,207,0.75);
       font-size: 12px;
-      line-height: 1.45;
+      line-height: 1.5;
     }
 
-    /* Collapsible assumptions */
+    /* Collapsible sections */
     details{
-      margin-top: 18px; /* Premium: breathing room */
+      margin-top: 14px;
       border: 1px solid rgba(255,255,255,0.10);
       background: rgba(255,255,255,0.03);
       border-radius: 14px;
@@ -411,7 +466,7 @@
       justify-content:space-between;
       gap: 10px;
       color: var(--muted);
-      font-weight: 700;
+      font-weight: 900;
       user-select:none;
     }
     summary::-webkit-details-marker{display:none}
@@ -423,12 +478,10 @@
       transition: transform .2s ease;
     }
     details[open] .chev{transform: rotate(225deg);}
-    .assump{
+    .section{
       padding: 0 12px 12px;
     }
-    .assump .grid{margin-top: 6px}
 
-    /* Footer */
     .footer{
       margin-top: 14px;
       display:flex;
@@ -446,7 +499,6 @@
       border-radius: 999px;
     }
 
-    /* Toast */
     .toast{
       position: fixed;
       left: 50%;
@@ -463,6 +515,7 @@
       backdrop-filter: blur(10px);
       box-shadow: var(--shadow2);
       font-size: 13px;
+      z-index: 9999;
     }
     .toast.show{
       opacity: 1;
@@ -477,7 +530,9 @@
       <div class="brand">
         <div class="badge"><span class="dot"></span> Freewill Tools</div>
         <h1>Marketplace Calculators</h1>
-        <p class="sub">Fast pricing decisions for Amazon & Noon — with clear assumptions and clean math.</p>
+        <p class="sub">
+          Use <b>Quick</b> for fast gut-checks, or <b>Advanced</b> for settlement-accurate math (Referral + Pick&Pack + Closing + VAT on fees).
+        </p>
       </div>
       <div class="meta">
         <div><strong>Tip:</strong> Press <span class="kbd">Enter</span> to calculate</div>
@@ -491,9 +546,9 @@
           <button class="tab active" id="tab-amz" role="tab" aria-selected="true" aria-controls="pane-amz">Amazon</button>
           <button class="tab" id="tab-noon" role="tab" aria-selected="false" aria-controls="pane-noon">Noon Deals</button>
         </div>
-        <div class="actions">
-          <div class="pill">Delivery defaults to <strong style="color:var(--text)">&nbsp;AED</strong>&nbsp;<span id="pillDelivery">11</span></div>
-          <div class="pill">VAT <span id="pillVat">5</span>%</div>
+
+        <div class="actions" id="headerPills">
+          <!-- Pills injected by JS depending on active pane/mode -->
         </div>
       </div>
 
@@ -503,67 +558,190 @@
         <div class="panel">
           <div class="panel-title">
             <h2 id="formTitle">Amazon Profit</h2>
-            <div class="hint" id="formHint">Enter CP & SP. Fee auto-applies by SP.</div>
+            <div class="hint" id="formHint">Choose Quick or Advanced.</div>
           </div>
 
           <!-- AMAZON PANE -->
           <div id="pane-amz" role="tabpanel" aria-labelledby="tab-amz">
-            <div class="grid">
-              <div class="field">
-                <label for="amz_cp">Cost Price (CP)</label>
-                <input type="number" inputmode="decimal" id="amz_cp" placeholder="e.g. 100" />
-                <span class="suffix">AED</span>
-              </div>
-
-              <div class="field">
-                <label for="amz_sp">Selling Price (SP)</label>
-                <input type="number" inputmode="decimal" id="amz_sp" placeholder="e.g. 147" />
-                <span class="suffix">AED</span>
-              </div>
+            <div class="subtabs" role="tablist" aria-label="Amazon calculator modes">
+              <button class="subtab active" id="subtab-quick" role="tab" aria-selected="true">
+                Quick
+                <small>CP + VAT + Delivery + Fee%</small>
+              </button>
+              <button class="subtab" id="subtab-adv" role="tab" aria-selected="false">
+                Advanced
+                <small>Referral + P&P + Closing + VAT</small>
+              </button>
             </div>
 
-            <div class="btnrow">
-              <button class="btn btn-primary" id="btnAmz">Calculate</button>
-              <button class="btn btn-ghost" id="btnAmzClear" type="button">Clear</button>
-            </div>
-
-            <details>
-              <summary>
-                Assumptions (editable)
-                <span class="chev" aria-hidden="true"></span>
-              </summary>
-              <div class="assump">
-                <div class="grid">
-                  <div class="field">
-                    <label for="vat_rate">VAT %</label>
-                    <input type="number" inputmode="decimal" id="vat_rate" placeholder="5" />
-                  </div>
-                  <div class="field">
-                    <label for="delivery_fee">Delivery Fee</label>
-                    <input type="number" inputmode="decimal" id="delivery_fee" placeholder="11" />
-                    <span class="suffix">AED</span>
-                  </div>
-                  <div class="field">
-                    <label for="fee_threshold">Fee threshold (SP ≤)</label>
-                    <input type="number" inputmode="decimal" id="fee_threshold" placeholder="50" />
-                    <span class="suffix">AED</span>
-                  </div>
-                  <div class="field">
-                    <label for="fee_low">Fee % (≤ threshold)</label>
-                    <input type="number" inputmode="decimal" id="fee_low" placeholder="8" />
-                  </div>
-                  <div class="field">
-                    <label for="fee_high">Fee % (> threshold)</label>
-                    <input type="number" inputmode="decimal" id="fee_high" placeholder="15" />
-                  </div>
+            <!-- QUICK AMAZON -->
+            <div id="amz-quick">
+              <div class="grid">
+                <div class="field">
+                  <label for="amz_cp">Cost Price (CP)</label>
+                  <input type="number" inputmode="decimal" id="amz_cp" placeholder="e.g. 100" />
+                  <span class="suffix">AED</span>
                 </div>
 
-                <p class="note">
-                  These defaults match your current calculator. Change them if your category fees or delivery costs differ.
-                  Settings are saved in your browser.
-                </p>
+                <div class="field">
+                  <label for="amz_sp">Selling Price (SP)</label>
+                  <input type="number" inputmode="decimal" id="amz_sp" placeholder="e.g. 147" />
+                  <span class="suffix">AED</span>
+                </div>
               </div>
-            </details>
+
+              <div class="btnrow">
+                <button class="btn btn-primary" id="btnAmzQuick">Calculate</button>
+                <button class="btn btn-ghost" id="btnAmzQuickClear" type="button">Clear</button>
+              </div>
+
+              <details>
+                <summary>
+                  Assumptions (editable)
+                  <span class="chev" aria-hidden="true"></span>
+                </summary>
+                <div class="section">
+                  <div class="grid">
+                    <div class="field">
+                      <label for="q_vat_rate">VAT %</label>
+                      <input type="number" inputmode="decimal" id="q_vat_rate" placeholder="5" />
+                    </div>
+                    <div class="field">
+                      <label for="q_delivery_fee">Delivery Fee</label>
+                      <input type="number" inputmode="decimal" id="q_delivery_fee" placeholder="11" />
+                      <span class="suffix">AED</span>
+                    </div>
+                    <div class="field">
+                      <label for="q_fee_threshold">Fee threshold (SP ≤)</label>
+                      <input type="number" inputmode="decimal" id="q_fee_threshold" placeholder="50" />
+                      <span class="suffix">AED</span>
+                    </div>
+                    <div class="field">
+                      <label for="q_fee_low">Fee % (≤ threshold)</label>
+                      <input type="number" inputmode="decimal" id="q_fee_low" placeholder="8" />
+                    </div>
+                    <div class="field">
+                      <label for="q_fee_high">Fee % (> threshold)</label>
+                      <input type="number" inputmode="decimal" id="q_fee_high" placeholder="15" />
+                    </div>
+                    <div class="field">
+                      <label for="q_ppc_cost">PPC / Ads per unit (optional)</label>
+                      <input type="number" inputmode="decimal" id="q_ppc_cost" placeholder="e.g. 2.50" />
+                      <span class="suffix">AED</span>
+                    </div>
+                  </div>
+
+                  <p class="note">
+                    Quick mode is best for speed. If you want settlement-accurate fees (Pick&Pack + Closing + VAT on fees), use <b>Advanced</b>.
+                    Settings are saved in your browser.
+                  </p>
+                </div>
+              </details>
+            </div>
+
+            <!-- ADVANCED AMAZON -->
+            <div id="amz-adv" style="display:none;">
+              <div class="grid">
+                <div class="field">
+                  <label for="a_sp">Selling Price (SP)</label>
+                  <input type="number" inputmode="decimal" id="a_sp" placeholder="e.g. 60" />
+                  <span class="suffix">AED</span>
+                </div>
+
+                <div class="field">
+                  <label for="a_cp_wholesale">Wholesale Cost (CP)</label>
+                  <input type="number" inputmode="decimal" id="a_cp_wholesale" placeholder="e.g. 28" />
+                  <span class="suffix">AED</span>
+                </div>
+
+                <div class="field">
+                  <label for="a_cp_loaded">Loaded Cost (optional)</label>
+                  <input type="number" inputmode="decimal" id="a_cp_loaded" placeholder="e.g. 35" />
+                  <span class="suffix">AED</span>
+                </div>
+
+                <div class="field">
+                  <label for="a_ppc_cost">PPC / Ads per unit (optional)</label>
+                  <input type="number" inputmode="decimal" id="a_ppc_cost" placeholder="e.g. 2.50" />
+                  <span class="suffix">AED</span>
+                </div>
+              </div>
+
+              <div class="btnrow">
+                <button class="btn btn-primary" id="btnAmzAdv">Calculate</button>
+                <button class="btn btn-ghost" id="btnAmzAdvClear" type="button">Clear</button>
+              </div>
+
+              <details open>
+                <summary>
+                  Fees & Presets (editable)
+                  <span class="chev" aria-hidden="true"></span>
+                </summary>
+                <div class="section">
+                  <div class="grid">
+                    <div class="field">
+                      <label for="a_preset">Fulfilment preset</label>
+                      <select id="a_preset">
+                        <option value="FBA">FBA (default)</option>
+                        <option value="FLEX">Seller Flex</option>
+                        <option value="CUSTOM">Custom</option>
+                      </select>
+                    </div>
+
+                    <div class="field">
+                      <label for="a_vat_rate">VAT % (fees)</label>
+                      <input type="number" inputmode="decimal" id="a_vat_rate" placeholder="5" />
+                    </div>
+
+                    <div class="field">
+                      <label for="a_referral_pct">Referral fee %</label>
+                      <input type="number" inputmode="decimal" id="a_referral_pct" placeholder="15" />
+                    </div>
+
+                    <div class="field">
+                      <label for="a_pickpack">Pick &amp; Pack fee (base)</label>
+                      <input type="number" inputmode="decimal" id="a_pickpack" placeholder="11.25" />
+                      <span class="suffix">AED</span>
+                    </div>
+
+                    <div class="field">
+                      <label for="a_closing_fee">Variable closing fee (base)</label>
+                      <input type="number" inputmode="decimal" id="a_closing_fee" placeholder="0.60" />
+                      <span class="suffix">AED</span>
+                    </div>
+                  </div>
+
+                  <p class="note">
+                    Switch preset to auto-fill fees for your situation. If you edit Pick&amp;Pack/Closing manually, it flips to <b>Custom</b>.
+                    Settings are saved in your browser.
+                  </p>
+                </div>
+              </details>
+
+              <details>
+                <summary>
+                  How the Advanced math works (explain it)
+                  <span class="chev" aria-hidden="true"></span>
+                </summary>
+                <div class="section">
+                  <p class="note" style="margin-top:0;">
+                    <b>1) Fees (incl. VAT)</b><br/>
+                    Referral = SP × referral% (+ VAT)<br/>
+                    Pick &amp; Pack = fixed (+ VAT)<br/>
+                    Closing = fixed (+ VAT)<br/><br/>
+                    <b>2) Amazon payout</b><br/>
+                    Payout = SP − Total Amazon Fees<br/><br/>
+                    <b>3) Profit</b><br/>
+                    Profit (Wholesale) = Payout − Wholesale CP − PPC<br/>
+                    Profit (Loaded) = Payout − Loaded CP − PPC<br/><br/>
+                    <b>4) Percentages</b><br/>
+                    Amazon take % = Total Fees ÷ SP<br/>
+                    Margin % = Profit ÷ SP<br/>
+                    ROI % = Profit ÷ Cost
+                  </p>
+                </div>
+              </details>
+            </div>
           </div>
 
           <!-- NOON PANE -->
@@ -601,12 +779,12 @@
           </div>
 
           <div class="receipt" id="output">
-            <div class="row"><span>Ready.</span><strong>Enter values and calculate</strong></div>
+            <div class="row"><span>Ready.</span><strong>Pick a tool and calculate</strong></div>
             <div class="note">Your results will appear here with a receipt-style breakdown.</div>
           </div>
 
           <div class="footer">
-            <div class="ver">v1.0 • Freewill UAE</div>
+            <div class="ver">v2.0 • Freewill UAE</div>
             <div>Built for speed, not guesswork.</div>
           </div>
         </div>
@@ -619,8 +797,8 @@
 
   <script>
     // ---- Helpers
-    const fmt = (n) => Number(n).toFixed(2);
     const $ = (id) => document.getElementById(id);
+    const fmt = (n) => Number(n).toFixed(2);
 
     const toast = (() => {
       let t;
@@ -633,57 +811,18 @@
       };
     })();
 
-    // ---- Persisted settings (localStorage)
-    const DEFAULTS = {
-      vat_rate: 5,
-      delivery_fee: 11,
-      fee_threshold: 50,
-      fee_low: 8,
-      fee_high: 15
-    };
-
-    function loadSettings() {
-      const saved = JSON.parse(localStorage.getItem("freewill_ecomtools_settings") || "null");
-      const s = { ...DEFAULTS, ...(saved || {}) };
-      $("vat_rate").value = s.vat_rate;
-      $("delivery_fee").value = s.delivery_fee;
-      $("fee_threshold").value = s.fee_threshold;
-      $("fee_low").value = s.fee_low;
-      $("fee_high").value = s.fee_high;
-
-      $("pillVat").textContent = s.vat_rate;
-      $("pillDelivery").textContent = s.delivery_fee;
-
-      return s;
+    function num(v, d=0){
+      const x = parseFloat(v);
+      return Number.isFinite(x) ? x : d;
     }
 
-    function saveSettings() {
-      const s = getSettings();
-      localStorage.setItem("freewill_ecomtools_settings", JSON.stringify(s));
-      $("pillVat").textContent = s.vat_rate;
-      $("pillDelivery").textContent = s.delivery_fee;
-      toast("Assumptions saved");
+    // ---- Header pills
+    function setHeaderPills(html){
+      $("headerPills").innerHTML = html;
     }
 
-    function getSettings() {
-      const num = (v, d) => (isNaN(parseFloat(v)) ? d : parseFloat(v));
-      return {
-        vat_rate: num($("vat_rate").value, DEFAULTS.vat_rate),
-        delivery_fee: num($("delivery_fee").value, DEFAULTS.delivery_fee),
-        fee_threshold: num($("fee_threshold").value, DEFAULTS.fee_threshold),
-        fee_low: num($("fee_low").value, DEFAULTS.fee_low),
-        fee_high: num($("fee_high").value, DEFAULTS.fee_high),
-      };
-    }
-
-    // Auto-save assumptions on change
-    ["vat_rate","delivery_fee","fee_threshold","fee_low","fee_high"].forEach(id => {
-      $(id).addEventListener("change", saveSettings);
-      $(id).addEventListener("blur", saveSettings);
-    });
-
-    // ---- Tabs
-    function setActive(tab) {
+    // ---- Tabs (Amazon / Noon)
+    function setActiveTab(tab) {
       const isAmz = tab === "amz";
 
       $("tab-amz").classList.toggle("active", isAmz);
@@ -695,64 +834,405 @@
       $("pane-noon").style.display = !isAmz ? "" : "none";
 
       $("formTitle").textContent = isAmz ? "Amazon Profit" : "Noon Deal Price";
-      $("formHint").textContent  = isAmz ? "Enter CP & SP. Fee auto-applies by SP." : "Enter original price and discount %.";
-      $("resultHint").textContent = isAmz ? "Shows VAT, delivery, fee, and net profit." : "Shows deal price after discount.";
+      $("formHint").textContent  = isAmz ? "Choose Quick or Advanced." : "Enter original price and discount %.";
+      $("resultHint").textContent = isAmz ? "Receipt breakdown + key percentages." : "Shows deal price after discount.";
 
-      // friendly output reset on tab switch
+      // Update pills for the active tab
+      if (isAmz) refreshPillsAmazon();
+      else refreshPillsNoon();
+
+      // friendly output reset
       $("output").innerHTML = `
         <div class="row"><span>Ready.</span><strong>${isAmz ? "Amazon breakdown" : "Noon deal price"}</strong></div>
         <div class="note">Enter values and calculate.</div>
       `;
     }
 
-    $("tab-amz").addEventListener("click", () => setActive("amz"));
-    $("tab-noon").addEventListener("click", () => setActive("noon"));
+    $("tab-amz").addEventListener("click", () => setActiveTab("amz"));
+    $("tab-noon").addEventListener("click", () => setActiveTab("noon"));
 
-    // ---- Calculations
-    function calculateAmazon() {
-      const cp = parseFloat($("amz_cp").value);
-      const sp = parseFloat($("amz_sp").value);
+    // ---- Amazon mode (Quick / Advanced)
+    function setAmazonMode(mode){
+      const isQuick = mode === "quick";
 
-      if (isNaN(cp) || isNaN(sp)) {
+      $("subtab-quick").classList.toggle("active", isQuick);
+      $("subtab-quick").setAttribute("aria-selected", isQuick ? "true" : "false");
+      $("amz-quick").style.display = isQuick ? "" : "none";
+
+      $("subtab-adv").classList.toggle("active", !isQuick);
+      $("subtab-adv").setAttribute("aria-selected", !isQuick ? "true" : "false");
+      $("amz-adv").style.display = !isQuick ? "" : "none";
+
+      localStorage.setItem("freewill_amz_mode", isQuick ? "quick" : "adv");
+
+      refreshPillsAmazon();
+      $("output").innerHTML = `
+        <div class="row"><span>Ready.</span><strong>${isQuick ? "Amazon Quick mode" : "Amazon Advanced mode"}</strong></div>
+        <div class="note">Enter values and calculate.</div>
+      `;
+    }
+
+    $("subtab-quick").addEventListener("click", () => setAmazonMode("quick"));
+    $("subtab-adv").addEventListener("click", () => setAmazonMode("adv"));
+
+    // ---- Quick settings persistence
+    const Q_DEFAULTS = {
+      q_vat_rate: 5,
+      q_delivery_fee: 11,
+      q_fee_threshold: 50,
+      q_fee_low: 8,
+      q_fee_high: 15,
+      q_ppc_cost: 0
+    };
+
+    function loadQuickSettings(){
+      const saved = JSON.parse(localStorage.getItem("freewill_amz_quick_settings") || "null");
+      const s = { ...Q_DEFAULTS, ...(saved || {}) };
+
+      $("q_vat_rate").value = s.q_vat_rate;
+      $("q_delivery_fee").value = s.q_delivery_fee;
+      $("q_fee_threshold").value = s.q_fee_threshold;
+      $("q_fee_low").value = s.q_fee_low;
+      $("q_fee_high").value = s.q_fee_high;
+      $("q_ppc_cost").value = s.q_ppc_cost;
+
+      return s;
+    }
+
+    function getQuickSettings(){
+      return {
+        q_vat_rate: num($("q_vat_rate").value, Q_DEFAULTS.q_vat_rate),
+        q_delivery_fee: num($("q_delivery_fee").value, Q_DEFAULTS.q_delivery_fee),
+        q_fee_threshold: num($("q_fee_threshold").value, Q_DEFAULTS.q_fee_threshold),
+        q_fee_low: num($("q_fee_low").value, Q_DEFAULTS.q_fee_low),
+        q_fee_high: num($("q_fee_high").value, Q_DEFAULTS.q_fee_high),
+        q_ppc_cost: num($("q_ppc_cost").value, Q_DEFAULTS.q_ppc_cost),
+      };
+    }
+
+    function saveQuickSettings(){
+      const s = getQuickSettings();
+      localStorage.setItem("freewill_amz_quick_settings", JSON.stringify(s));
+      refreshPillsAmazon();
+      toast("Assumptions saved");
+    }
+
+    ["q_vat_rate","q_delivery_fee","q_fee_threshold","q_fee_low","q_fee_high","q_ppc_cost"].forEach(id=>{
+      $(id).addEventListener("change", saveQuickSettings);
+      $(id).addEventListener("blur", saveQuickSettings);
+    });
+
+    // ---- Advanced settings persistence + presets
+    const A_DEFAULTS = {
+      a_preset: "FBA",
+      a_vat_rate: 5,
+      a_referral_pct: 15,
+      a_pickpack: 11.25,
+      a_closing_fee: 0.60,
+      // Presets (you can adjust later in code if needed)
+      preset_fba_pickpack: 11.25,
+      preset_fba_closing: 0.60,
+      preset_flex_pickpack: 11.25,
+      preset_flex_closing: 0.60
+    };
+
+    function loadAdvSettings(){
+      const saved = JSON.parse(localStorage.getItem("freewill_amz_adv_settings") || "null");
+      const s = { ...A_DEFAULTS, ...(saved || {}) };
+
+      $("a_preset").value = s.a_preset;
+      $("a_vat_rate").value = s.a_vat_rate;
+      $("a_referral_pct").value = s.a_referral_pct;
+      $("a_pickpack").value = s.a_pickpack;
+      $("a_closing_fee").value = s.a_closing_fee;
+
+      return s;
+    }
+
+    function getAdvSettings(){
+      return {
+        a_preset: $("a_preset").value || "CUSTOM",
+        a_vat_rate: num($("a_vat_rate").value, A_DEFAULTS.a_vat_rate),
+        a_referral_pct: num($("a_referral_pct").value, A_DEFAULTS.a_referral_pct),
+        a_pickpack: num($("a_pickpack").value, A_DEFAULTS.a_pickpack),
+        a_closing_fee: num($("a_closing_fee").value, A_DEFAULTS.a_closing_fee),
+        // keep preset slots
+        preset_fba_pickpack: A_DEFAULTS.preset_fba_pickpack,
+        preset_fba_closing: A_DEFAULTS.preset_fba_closing,
+        preset_flex_pickpack: A_DEFAULTS.preset_flex_pickpack,
+        preset_flex_closing: A_DEFAULTS.preset_flex_closing
+      };
+    }
+
+    function saveAdvSettings(msg="Fees saved"){
+      const s = getAdvSettings();
+      localStorage.setItem("freewill_amz_adv_settings", JSON.stringify(s));
+      refreshPillsAmazon();
+      toast(msg);
+    }
+
+    function applyPreset(preset){
+      // Read stored settings (so we don't lose user-changed VAT/Referral)
+      const current = getAdvSettings();
+
+      if (preset === "FBA"){
+        $("a_pickpack").value = A_DEFAULTS.preset_fba_pickpack;
+        $("a_closing_fee").value = A_DEFAULTS.preset_fba_closing;
+      } else if (preset === "FLEX"){
+        $("a_pickpack").value = A_DEFAULTS.preset_flex_pickpack;
+        $("a_closing_fee").value = A_DEFAULTS.preset_flex_closing;
+      }
+      $("a_preset").value = preset;
+      saveAdvSettings("Preset applied");
+    }
+
+    $("a_preset").addEventListener("change", (e)=>{
+      const v = e.target.value;
+      if (v === "FBA" || v === "FLEX") applyPreset(v);
+      else saveAdvSettings("Fees saved");
+    });
+
+    // If user edits fees manually -> switch to CUSTOM automatically
+    function markCustom(){
+      if ($("a_preset").value !== "CUSTOM"){
+        $("a_preset").value = "CUSTOM";
+      }
+      saveAdvSettings("Fees saved");
+    }
+
+    ["a_vat_rate","a_referral_pct"].forEach(id=>{
+      $(id).addEventListener("change", saveAdvSettings);
+      $(id).addEventListener("blur", saveAdvSettings);
+    });
+    ["a_pickpack","a_closing_fee"].forEach(id=>{
+      $(id).addEventListener("change", markCustom);
+      $(id).addEventListener("blur", markCustom);
+    });
+
+    // ---- Pills refresh
+    function refreshPillsAmazon(){
+      const mode = localStorage.getItem("freewill_amz_mode") || "quick";
+      if (mode === "quick"){
+        const s = getQuickSettings();
+        setHeaderPills(`
+          <div class="pill">Mode <strong style="color:var(--text)">Quick</strong></div>
+          <div class="pill">VAT <span>${s.q_vat_rate}</span>%</div>
+          <div class="pill">Delivery <strong style="color:var(--text)">&nbsp;AED</strong>&nbsp;<span>${s.q_delivery_fee}</span></div>
+        `);
+      } else {
+        const s = getAdvSettings();
+        const presetLabel = (s.a_preset === "FLEX") ? "Seller Flex" : (s.a_preset === "FBA" ? "FBA" : "Custom");
+        setHeaderPills(`
+          <div class="pill">Mode <strong style="color:var(--text)">Advanced</strong></div>
+          <div class="pill">Preset <strong style="color:var(--text)">${presetLabel}</strong></div>
+          <div class="pill">VAT <span>${s.a_vat_rate}</span>%</div>
+          <div class="pill">Referral <span>${s.a_referral_pct}</span>%</div>
+          <div class="pill">P&amp;P <strong style="color:var(--text)">&nbsp;AED</strong>&nbsp;<span>${fmt(s.a_pickpack).replace(/\.00$/,"")}</span></div>
+        `);
+      }
+    }
+
+    function refreshPillsNoon(){
+      setHeaderPills(`
+        <div class="pill">Mode <strong style="color:var(--text)">Noon Deals</strong></div>
+        <div class="pill">Currency <strong style="color:var(--text)">AED</strong></div>
+      `);
+    }
+
+    // ---- Calculations: Amazon Quick
+    function calculateAmazonQuick() {
+      const cp = num($("amz_cp").value, NaN);
+      const sp = num($("amz_sp").value, NaN);
+      if (!Number.isFinite(cp) || !Number.isFinite(sp)) {
         $("output").innerHTML = `<div class="row"><span>Input error</span><strong class="bad">Enter valid CP and SP</strong></div>`;
         return;
       }
 
-      const s = getSettings();
+      const s = getQuickSettings();
+      const vat = s.q_vat_rate / 100;
 
-      const cpWithVat = cp * (1 + (s.vat_rate / 100));
-      const delivery = s.delivery_fee;
+      const cpWithVat = cp * (1 + vat);
+      const delivery = s.q_delivery_fee;
 
-      // Fee based on SELLING PRICE
-      const feeRate = (sp <= s.fee_threshold) ? (s.fee_low / 100) : (s.fee_high / 100);
+      const feeRate = (sp <= s.q_fee_threshold) ? (s.q_fee_low / 100) : (s.q_fee_high / 100);
       const amazonFee = sp * feeRate;
 
-      const profit = sp - cpWithVat - delivery - amazonFee;
+      const ppc = s.q_ppc_cost;
+      const payoutApprox = sp - amazonFee - delivery; // not settlement-accurate, quick only
+      const profit = sp - cpWithVat - delivery - amazonFee - ppc;
+
+      const amazonTakePct = sp > 0 ? ((amazonFee + delivery) / sp) * 100 : 0; // quick approximation
+      const margin = sp > 0 ? (profit / sp) * 100 : 0;
+      const roi = cp > 0 ? (profit / cp) * 100 : 0;
+
       const profitClass = profit >= 0 ? "good" : "bad";
+      const adsHint =
+        margin >= 12 ? {t:"Ad room: Healthy", c:"good"} :
+        margin >= 8  ? {t:"Ad room: Tight", c:"warn"} :
+                        {t:"Ad room: Risky", c:"bad"};
 
       $("output").innerHTML = `
+        <div class="row"><span>Mode</span><strong>Amazon • Quick</strong></div>
+        <div class="row"><span>Selling Price (SP)</span><strong>AED ${fmt(sp)}</strong></div>
         <div class="row"><span>CP (with VAT)</span><strong>AED ${fmt(cpWithVat)}</strong></div>
         <div class="row"><span>Delivery</span><strong>AED ${fmt(delivery)}</strong></div>
         <div class="row"><span>Amazon fee (${(feeRate*100).toFixed(0)}%)</span><strong>AED ${fmt(amazonFee)}</strong></div>
+        <div class="row"><span>PPC / Ads</span><strong>AED ${fmt(ppc)}</strong></div>
 
         <div class="divider"></div>
 
-        <div class="profitline">
-          <div class="label">Net Profit</div>
-          <div class="amount ${profitClass}">AED ${fmt(profit)}</div>
+        <div class="row"><span>Approx payout (SP − fee − delivery)</span><strong>AED ${fmt(payoutApprox)}</strong></div>
+
+        <div class="divider"></div>
+
+        <div class="kpis">
+          <div class="kpi">
+            <div class="klabel">Net Profit</div>
+            <div class="kval ${profitClass}">AED ${fmt(profit)}</div>
+            <div class="note" style="margin-top:6px;">Margin: ${fmt(margin)}% • ROI: ${fmt(roi)}%</div>
+          </div>
+
+          <div class="kpi">
+            <div class="klabel">${adsHint.t}</div>
+            <div class="kval ${adsHint.c}">${fmt(margin)}% margin</div>
+            <div class="note" style="margin-top:6px;">Quick mode is best for rough decisions.</div>
+          </div>
+
+          <div class="kpi">
+            <div class="klabel">Fee rule used</div>
+            <div class="kval">SP ${sp <= s.q_fee_threshold ? "≤" : ">"} AED ${fmt(s.q_fee_threshold)}</div>
+            <div class="note" style="margin-top:6px;">Fee: ${sp <= s.q_fee_threshold ? s.q_fee_low : s.q_fee_high}%</div>
+          </div>
+
+          <div class="kpi">
+            <div class="klabel">Amazon take (approx)</div>
+            <div class="kval">${fmt(amazonTakePct)}%</div>
+            <div class="note" style="margin-top:6px;">This excludes Pick&amp;Pack/Closing. Use Advanced for accurate fee %.</div>
+          </div>
         </div>
 
         <div class="note">
-          Assumptions: VAT ${s.vat_rate}%, Delivery AED ${s.delivery_fee}, Fee rule: ${s.fee_low}% if SP ≤ AED ${s.fee_threshold}, else ${s.fee_high}%.
+          Assumptions: VAT ${s.q_vat_rate}%, Delivery AED ${s.q_delivery_fee}, Fee rule: ${s.q_fee_low}% if SP ≤ AED ${s.q_fee_threshold}, else ${s.q_fee_high}%.
         </div>
       `;
     }
 
-    function calculateNoon() {
-      const price = parseFloat($("noon_price").value);
-      const discount = parseFloat($("noon_discount").value);
+    // ---- Calculations: Amazon Advanced
+    function calculateAmazonAdv(){
+      const sp = num($("a_sp").value, NaN);
+      const cpW = num($("a_cp_wholesale").value, NaN);
+      const cpL_in = num($("a_cp_loaded").value, NaN);
+      const ppc = num($("a_ppc_cost").value, 0);
 
-      if (isNaN(price) || isNaN(discount)) {
+      if (!Number.isFinite(sp) || !Number.isFinite(cpW)){
+        $("output").innerHTML = `<div class="row"><span>Input error</span><strong class="bad">Enter SP and Wholesale CP</strong></div>`;
+        return;
+      }
+
+      const s = getAdvSettings();
+      const vat = s.a_vat_rate / 100;
+
+      const cpL = Number.isFinite(cpL_in) ? cpL_in : cpW;
+
+      const referralBase = sp * (s.a_referral_pct / 100);
+      const pickBase = s.a_pickpack;
+      const closeBase = s.a_closing_fee;
+
+      const referralVat = referralBase * vat;
+      const pickVat = pickBase * vat;
+      const closeVat = closeBase * vat;
+
+      const referralTotal = referralBase + referralVat;
+      const pickTotal = pickBase + pickVat;
+      const closeTotal = closeBase + closeVat;
+
+      const totalFees = referralTotal + pickTotal + closeTotal;
+      const payout = sp - totalFees;
+
+      const profitW = payout - cpW - ppc;
+      const profitL = payout - cpL - ppc;
+
+      const amazonTakePct = sp > 0 ? (totalFees / sp) * 100 : 0;
+      const marginW = sp > 0 ? (profitW / sp) * 100 : 0;
+      const marginL = sp > 0 ? (profitL / sp) * 100 : 0;
+
+      const roiW = cpW > 0 ? (profitW / cpW) * 100 : 0;
+      const roiL = cpL > 0 ? (profitL / cpL) * 100 : 0;
+
+      const clsW = profitW >= 0 ? "good" : "bad";
+      const clsL = profitL >= 0 ? "good" : "bad";
+
+      const adsHint =
+        marginL >= 12 ? {t:"Ad room: Healthy", c:"good"} :
+        marginL >= 8  ? {t:"Ad room: Tight", c:"warn"} :
+                        {t:"Ad room: Risky", c:"bad"};
+
+      const presetLabel = (s.a_preset === "FLEX") ? "Seller Flex" : (s.a_preset === "FBA" ? "FBA" : "Custom");
+
+      $("output").innerHTML = `
+        <div class="row"><span>Mode</span><strong>Amazon • Advanced (${presetLabel})</strong></div>
+        <div class="row"><span>Selling Price (SP)</span><strong>AED ${fmt(sp)}</strong></div>
+
+        <div class="row"><span>Referral fee (${fmt(s.a_referral_pct)}%)</span><strong>AED ${fmt(referralTotal)}</strong></div>
+        <div class="subrow"><span>Base AED ${fmt(referralBase)} + VAT AED ${fmt(referralVat)}</span><span></span></div>
+
+        <div class="row"><span>Pick &amp; Pack</span><strong>AED ${fmt(pickTotal)}</strong></div>
+        <div class="subrow"><span>Base AED ${fmt(pickBase)} + VAT AED ${fmt(pickVat)}</span><span></span></div>
+
+        <div class="row"><span>Variable closing</span><strong>AED ${fmt(closeTotal)}</strong></div>
+        <div class="subrow"><span>Base AED ${fmt(closeBase)} + VAT AED ${fmt(closeVat)}</span><span></span></div>
+
+        <div class="divider"></div>
+
+        <div class="row"><span>Total Amazon fees</span><strong>AED ${fmt(totalFees)}</strong></div>
+        <div class="row"><span>Amazon payout (to you)</span><strong>AED ${fmt(payout)}</strong></div>
+
+        <div class="divider"></div>
+
+        <div class="row"><span>Wholesale CP</span><strong>AED ${fmt(cpW)}</strong></div>
+        <div class="row"><span>Loaded CP</span><strong>AED ${fmt(cpL)}</strong></div>
+        <div class="row"><span>PPC / Ads</span><strong>AED ${fmt(ppc)}</strong></div>
+
+        <div class="divider"></div>
+
+        <div class="kpis">
+          <div class="kpi">
+            <div class="klabel">Profit (Wholesale)</div>
+            <div class="kval ${clsW}">AED ${fmt(profitW)}</div>
+            <div class="note" style="margin-top:6px;">Margin: ${fmt(marginW)}% • ROI: ${fmt(roiW)}%</div>
+          </div>
+
+          <div class="kpi">
+            <div class="klabel">Profit (Loaded)</div>
+            <div class="kval ${clsL}">AED ${fmt(profitL)}</div>
+            <div class="note" style="margin-top:6px;">Margin: ${fmt(marginL)}% • ROI: ${fmt(roiL)}%</div>
+          </div>
+
+          <div class="kpi">
+            <div class="klabel">Amazon takes</div>
+            <div class="kval">AED ${fmt(totalFees)} <span style="color:rgba(168,179,207,0.75); font-size:13px;">(${fmt(amazonTakePct)}%)</span></div>
+            <div class="note" style="margin-top:6px;">Referral + P&amp;P + closing (incl. VAT on fees).</div>
+          </div>
+
+          <div class="kpi">
+            <div class="klabel">${adsHint.t}</div>
+            <div class="kval ${adsHint.c}">${fmt(marginL)}% margin (Loaded)</div>
+            <div class="note" style="margin-top:6px;">Add your avg PPC to see true net.</div>
+          </div>
+        </div>
+
+        <div class="note">
+          Pro tip: Advanced mode should match your settlement payout: <b>Payout = SP − Total Amazon fees</b>.
+        </div>
+      `;
+    }
+
+    // ---- Noon calculation
+    function calculateNoon() {
+      const price = num($("noon_price").value, NaN);
+      const discount = num($("noon_discount").value, NaN);
+
+      if (!Number.isFinite(price) || !Number.isFinite(discount)) {
         $("output").innerHTML = `<div class="row"><span>Input error</span><strong class="bad">Enter valid price and discount</strong></div>`;
         return;
       }
@@ -760,52 +1240,79 @@
       const dealPrice = price - (price * discount / 100);
 
       $("output").innerHTML = `
+        <div class="row"><span>Mode</span><strong>Noon Deals</strong></div>
         <div class="row"><span>Original Price</span><strong>AED ${fmt(price)}</strong></div>
         <div class="row"><span>Discount</span><strong>${discount.toFixed(2)}%</strong></div>
 
         <div class="divider"></div>
 
-        <div class="profitline">
-          <div class="label">Deal Price</div>
-          <div class="amount good">AED ${fmt(dealPrice)}</div>
-        </div>
-
-        <div class="note">
-          If you want: add Noon commission + fulfilment costs to calculate net profit.
+        <div class="kpis">
+          <div class="kpi">
+            <div class="klabel">Deal Price</div>
+            <div class="kval good">AED ${fmt(dealPrice)}</div>
+            <div class="note" style="margin-top:6px;">Deal price after discount.</div>
+          </div>
+          <div class="kpi">
+            <div class="klabel">Next upgrade</div>
+            <div class="kval">Net Profit mode</div>
+            <div class="note" style="margin-top:6px;">Add Noon commission + fulfilment costs.</div>
+          </div>
         </div>
       `;
     }
 
     // ---- Buttons
-    $("btnAmz").addEventListener("click", calculateAmazon);
+    $("btnAmzQuick").addEventListener("click", calculateAmazonQuick);
+    $("btnAmzAdv").addEventListener("click", calculateAmazonAdv);
     $("btnNoon").addEventListener("click", calculateNoon);
 
-    $("btnAmzClear").addEventListener("click", () => {
+    $("btnAmzQuickClear").addEventListener("click", () => {
       $("amz_cp").value = "";
       $("amz_sp").value = "";
-      $("output").innerHTML = `<div class="row"><span>Cleared</span><strong>Enter values and calculate</strong></div>`;
+      $("output").innerHTML = `<div class="row"><span>Cleared</span><strong>Amazon Quick</strong></div>`;
       $("amz_cp").focus();
+    });
+
+    $("btnAmzAdvClear").addEventListener("click", () => {
+      $("a_sp").value = "";
+      $("a_cp_wholesale").value = "";
+      $("a_cp_loaded").value = "";
+      $("a_ppc_cost").value = "";
+      $("output").innerHTML = `<div class="row"><span>Cleared</span><strong>Amazon Advanced</strong></div>`;
+      $("a_sp").focus();
     });
 
     $("btnNoonClear").addEventListener("click", () => {
       $("noon_price").value = "";
       $("noon_discount").value = "";
-      $("output").innerHTML = `<div class="row"><span>Cleared</span><strong>Enter values and calculate</strong></div>`;
+      $("output").innerHTML = `<div class="row"><span>Cleared</span><strong>Noon Deals</strong></div>`;
       $("noon_price").focus();
     });
 
-    // ---- Keyboard: Enter to calculate on active tab
-    function handleEnter(e) {
+    // ---- Keyboard: Enter to calculate on active pane/mode
+    document.addEventListener("keydown", (e)=>{
       if (e.key !== "Enter") return;
+
       const amzActive = $("tab-amz").classList.contains("active");
-      if (amzActive) calculateAmazon();
-      else calculateNoon();
-    }
-    document.addEventListener("keydown", handleEnter);
+      if (!amzActive){
+        calculateNoon();
+        return;
+      }
+
+      const mode = localStorage.getItem("freewill_amz_mode") || "quick";
+      if (mode === "quick") calculateAmazonQuick();
+      else calculateAmazonAdv();
+    });
 
     // ---- Init
-    loadSettings();
-    setActive("amz");
+    loadQuickSettings();
+    loadAdvSettings();
+
+    // Restore last Amazon mode
+    const lastMode = localStorage.getItem("freewill_amz_mode") || "quick";
+    setAmazonMode(lastMode);
+
+    setActiveTab("amz");
   </script>
 </body>
 </html>
