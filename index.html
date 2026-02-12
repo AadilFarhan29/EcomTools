@@ -684,7 +684,7 @@
         <div class="badge"><span class="dot"></span> Freewill Tools</div>
         <h1>Marketplace Calculators</h1>
         <p class="sub">
-          Use <b>Quick</b> for fast gut-checks, or <b>Advanced</b> for settlement-accurate math (Referral + Pick&Pack + Closing + VAT on fees).
+          Use <b>Quick</b> for gut-checks, <b>Advanced</b> for fees, or <b>Vendor</b> for direct Amazon supply.
         </p>
       </div>
       <div class="meta">
@@ -702,33 +702,33 @@
         </div>
 
         <div class="actions" id="headerPills">
-          <!-- Pills injected by JS depending on active pane/mode -->
-        </div>
+          </div>
       </div>
 
       <div class="card-body">
 
-        <!-- LEFT: Inputs -->
         <div class="panel">
           <div class="panel-title">
             <h2 id="formTitle">Amazon Profit</h2>
-            <div class="hint" id="formHint">Choose Quick or Advanced.</div>
+            <div class="hint" id="formHint">Choose Quick, Advanced, or Vendor.</div>
           </div>
 
-          <!-- AMAZON PANE -->
           <div id="pane-amz" role="tabpanel" aria-labelledby="tab-amz">
             <div class="subtabs" role="tablist" aria-label="Amazon calculator modes">
               <button class="subtab active" id="subtab-quick" role="tab" aria-selected="true">
                 Quick
-                <small>CP + VAT + Delivery + Fee%</small>
+                <small>Gut check</small>
               </button>
               <button class="subtab" id="subtab-adv" role="tab" aria-selected="false">
                 Advanced
-                <small>Referral + P&P + Closing + VAT</small>
+                <small>Seller Central</small>
+              </button>
+              <button class="subtab" id="subtab-vc" role="tab" aria-selected="false">
+                Vendor
+                <small>Vendor Central</small>
               </button>
             </div>
 
-            <!-- QUICK AMAZON -->
             <div id="amz-quick">
               <div class="grid">
                 <div class="field">
@@ -793,7 +793,6 @@
               </details>
             </div>
 
-            <!-- ADVANCED AMAZON -->
             <div id="amz-adv" style="display:none;">
               <div class="grid">
                 <div class="field">
@@ -896,9 +895,57 @@
                 </div>
               </details>
             </div>
+
+            <div id="amz-vc" style="display:none;">
+              <div class="grid">
+                <div class="field">
+                  <label for="vc_rrp">Amazon RRP (Selling Price)</label>
+                  <input type="number" inputmode="decimal" id="vc_rrp" placeholder="e.g. 150" />
+                  <span class="suffix">AED</span>
+                </div>
+
+                <div class="field">
+                  <label for="vc_invoice">Your Invoice Price</label>
+                  <input type="number" inputmode="decimal" id="vc_invoice" placeholder="e.g. 100" />
+                  <span class="suffix">AED</span>
+                </div>
+
+                <div class="field">
+                  <label for="vc_cost">Product Cost (Landed)</label>
+                  <input type="number" inputmode="decimal" id="vc_cost" placeholder="e.g. 60" />
+                  <span class="suffix">AED</span>
+                </div>
+              </div>
+
+              <div class="btnrow">
+                <button class="btn btn-primary" id="btnAmzVC">Calculate</button>
+                <button class="btn btn-ghost" id="btnAmzVCClear" type="button">Clear</button>
+              </div>
+
+              <details>
+                <summary>
+                  Vendor Terms (editable)
+                  <span class="chev" aria-hidden="true"></span>
+                </summary>
+                <div class="section">
+                  <div class="grid">
+                    <div class="field">
+                      <label for="vc_front_margin">Front Margin %</label>
+                      <input type="number" inputmode="decimal" id="vc_front_margin" placeholder="18" />
+                    </div>
+                    <div class="field">
+                      <label for="vc_csa">Back End CSA %</label>
+                      <input type="number" inputmode="decimal" id="vc_csa" placeholder="20" />
+                    </div>
+                  </div>
+                  <p class="note">
+                    Default: 18% Front Margin, 20% Back End CSA (Co-op). Adjust these to match your actual Vendor agreement.
+                  </p>
+                </div>
+              </details>
+            </div>
           </div>
 
-          <!-- NOON PANE -->
           <div id="pane-noon" role="tabpanel" aria-labelledby="tab-noon" style="display:none;">
             <div class="grid">
               <div class="field">
@@ -925,7 +972,6 @@
           </div>
 
 
-          <!-- PROFIT PANE -->
           <div id="pane-profit" role="tabpanel" aria-labelledby="tab-profit" style="display:none;">
             <div class="grid">
               <div class="field">
@@ -991,7 +1037,6 @@
           </div>
         </div>
 
-        <!-- RIGHT: Output -->
         <div class="panel">
           <div class="panel-title">
             <h2>Result</h2>
@@ -1004,7 +1049,7 @@
           </div>
 
           <div class="footer">
-            <div class="ver">v3.0 • Freewill UAE</div>
+            <div class="ver">v4.0 • Freewill UAE</div>
             <div>Built for speed, not guesswork.</div>
           </div>
         </div>
@@ -1065,7 +1110,7 @@
 
       // Titles & hints
       $("formTitle").textContent = isAmz ? "Amazon Profit" : (isNoon ? "Noon Deal Price" : "Profit Margin");
-      $("formHint").textContent  = isAmz ? "Choose Quick or Advanced." : (isNoon ? "Enter original price and discount %." : "Enter CP + SP to see profit, margin, and spending room.");
+      $("formHint").textContent  = isAmz ? "Choose Quick, Advanced, or Vendor." : (isNoon ? "Enter original price and discount %." : "Enter CP + SP to see profit, margin, and spending room.");
       $("resultHint").textContent = isAmz ? "Receipt breakdown + key percentages." : (isNoon ? "Shows deal price after discount." : "Shows profit, margin %, and how much room you have.");
 
       // Update pills for the active tab
@@ -1086,29 +1131,41 @@
     $("tab-noon").addEventListener("click", () => setActiveTab("noon"));
     $("tab-profit").addEventListener("click", () => setActiveTab("profit"));
 
-    // ---- Amazon mode (Quick / Advanced)
+    // ---- Amazon mode (Quick / Advanced / Vendor)
     function setAmazonMode(mode){
       const isQuick = mode === "quick";
+      const isAdv = mode === "adv";
+      const isVC = mode === "vc";
 
       $("subtab-quick").classList.toggle("active", isQuick);
       $("subtab-quick").setAttribute("aria-selected", isQuick ? "true" : "false");
       $("amz-quick").style.display = isQuick ? "" : "none";
 
-      $("subtab-adv").classList.toggle("active", !isQuick);
-      $("subtab-adv").setAttribute("aria-selected", !isQuick ? "true" : "false");
-      $("amz-adv").style.display = !isQuick ? "" : "none";
+      $("subtab-adv").classList.toggle("active", isAdv);
+      $("subtab-adv").setAttribute("aria-selected", isAdv ? "true" : "false");
+      $("amz-adv").style.display = isAdv ? "" : "none";
 
-      localStorage.setItem("freewill_amz_mode", isQuick ? "quick" : "adv");
+      $("subtab-vc").classList.toggle("active", isVC);
+      $("subtab-vc").setAttribute("aria-selected", isVC ? "true" : "false");
+      $("amz-vc").style.display = isVC ? "" : "none";
+
+      localStorage.setItem("freewill_amz_mode", mode);
 
       refreshPillsAmazon();
+      
+      let label = "Amazon Quick mode";
+      if(isAdv) label = "Amazon Advanced mode";
+      if(isVC) label = "Vendor Central mode";
+
       $("output").innerHTML = `
-        <div class="row"><span>Ready.</span><strong>${isQuick ? "Amazon Quick mode" : "Amazon Advanced mode"}</strong></div>
+        <div class="row"><span>Ready.</span><strong>${label}</strong></div>
         <div class="note">Enter values and calculate.</div>
       `;
     }
 
     $("subtab-quick").addEventListener("click", () => setAmazonMode("quick"));
     $("subtab-adv").addEventListener("click", () => setAmazonMode("adv"));
+    $("subtab-vc").addEventListener("click", () => setAmazonMode("vc"));
 
     // ---- Quick settings persistence
     const Q_DEFAULTS = {
@@ -1244,6 +1301,39 @@
       $(id).addEventListener("blur", markCustom);
     });
 
+    // ---- Vendor Central Settings
+    const VC_DEFAULTS = {
+      vc_front_margin: 18,
+      vc_csa: 20
+    };
+
+    function loadVCSettings(){
+      const saved = JSON.parse(localStorage.getItem("freewill_amz_vc_settings") || "null");
+      const s = { ...VC_DEFAULTS, ...(saved || {}) };
+      $("vc_front_margin").value = s.vc_front_margin;
+      $("vc_csa").value = s.vc_csa;
+      return s;
+    }
+
+    function getVCSettings(){
+      return {
+        vc_front_margin: num($("vc_front_margin").value, VC_DEFAULTS.vc_front_margin),
+        vc_csa: num($("vc_csa").value, VC_DEFAULTS.vc_csa)
+      };
+    }
+
+    function saveVCSettings(){
+      const s = getVCSettings();
+      localStorage.setItem("freewill_amz_vc_settings", JSON.stringify(s));
+      refreshPillsAmazon();
+      toast("Vendor terms saved");
+    }
+
+    ["vc_front_margin", "vc_csa"].forEach(id => {
+      $(id).addEventListener("change", saveVCSettings);
+      $(id).addEventListener("blur", saveVCSettings);
+    });
+
 
     // ---- Profit Margin settings (simple tool)
     const PM_DEFAULTS = {
@@ -1303,7 +1393,7 @@
           <div class="pill">VAT <span>${s.q_vat_rate}</span>%</div>
           <div class="pill">Delivery <strong style="color:var(--text)">&nbsp;AED</strong>&nbsp;<span>${s.q_delivery_fee}</span></div>
         `);
-      } else {
+      } else if (mode === "adv") {
         const s = getAdvSettings();
         const presetLabel = (s.a_preset === "FLEX") ? "Seller Flex" : (s.a_preset === "FBA" ? "FBA" : "Custom");
         setHeaderPills(`
@@ -1312,6 +1402,14 @@
           <div class="pill">VAT <span>${s.a_vat_rate}</span>%</div>
           <div class="pill">Referral <span>${s.a_referral_pct}</span>%</div>
           <div class="pill">P&amp;P <strong style="color:var(--text)">&nbsp;AED</strong>&nbsp;<span>${fmt(s.a_pickpack).replace(/\.00$/,"")}</span></div>
+        `);
+      } else {
+        // Vendor Central Pills
+        const s = getVCSettings();
+        setHeaderPills(`
+          <div class="pill">Mode <strong style="color:var(--text)">Vendor Central</strong></div>
+          <div class="pill">CSA <strong style="color:var(--text)">${s.vc_csa}%</strong></div>
+          <div class="pill">Front <strong style="color:var(--text)">${s.vc_front_margin}%</strong></div>
         `);
       }
     }
@@ -1523,6 +1621,87 @@
       `;
     }
 
+    // ---- Calculations: Amazon Vendor Central
+    function calculateAmazonVC(){
+      const rrp = num($("vc_rrp").value, NaN);
+      const invoice = num($("vc_invoice").value, NaN);
+      const cost = num($("vc_cost").value, NaN);
+
+      if (!Number.isFinite(rrp) || !Number.isFinite(invoice) || !Number.isFinite(cost)){
+        $("output").innerHTML = `<div class="row"><span>Input error</span><strong class="bad">Enter RRP, Invoice, and Cost</strong></div>`;
+        return;
+      }
+
+      const s = getVCSettings();
+      
+      const frontMarginVal = rrp * (s.vc_front_margin / 100);
+      const amzBuyCost = rrp - frontMarginVal; // Target
+
+      const csaVal = invoice * (s.vc_csa / 100);
+      const netInHand = invoice - csaVal;
+
+      const realProfit = netInHand - cost;
+      
+      const profitPctRRP = rrp > 0 ? (realProfit / rrp) * 100 : 0;
+      const profitPctInvoice = invoice > 0 ? (realProfit / invoice) * 100 : 0;
+
+      // Health Label Logic
+      let health = { t: "Unset", c: "muted" };
+      if (profitPctRRP < 5) health = { t: "Loss", c: "bad" };
+      else if (profitPctRRP < 10) health = { t: "High Risk", c: "bad" };
+      else if (profitPctRRP <= 20) health = { t: "Acceptable", c: "warn" }; // using warn color for amber
+      else health = { t: "Strong", c: "good" };
+
+      const profitClass = realProfit >= 0 ? "good" : "bad";
+
+      $("output").innerHTML = `
+        <div class="row"><span>Mode</span><strong>Amazon • Vendor Central</strong></div>
+        <div class="row"><span>Amazon RRP</span><strong>AED ${fmt(rrp)}</strong></div>
+        <div class="row"><span>Your Invoice Price</span><strong>AED ${fmt(invoice)}</strong></div>
+        <div class="row"><span>Product Cost</span><strong>AED ${fmt(cost)}</strong></div>
+
+        <div class="divider"></div>
+
+        <div class="row"><span>Front Margin (${s.vc_front_margin}%)</span><strong>AED ${fmt(frontMarginVal)}</strong></div>
+        <div class="row"><span>Amz Buy Cost (Target)</span><strong>AED ${fmt(amzBuyCost)}</strong></div>
+        <div class="subrow"><span>RRP − Front Margin. Compare with your Invoice Price.</span><span></span></div>
+
+        <div class="divider"></div>
+
+        <div class="row"><span>Back End CSA (${s.vc_csa}%)</span><strong>AED ${fmt(csaVal)}</strong></div>
+        <div class="row"><span>Net In Hand</span><strong>AED ${fmt(netInHand)}</strong></div>
+        <div class="subrow"><span>Invoice Price − CSA (Co-op fees)</span><span></span></div>
+
+        <div class="divider"></div>
+
+        <div class="kpis">
+          <div class="kpi">
+            <div class="klabel">Real Profit (Cash)</div>
+            <div class="kval ${profitClass}">AED ${fmt(realProfit)}</div>
+            <div class="note" style="margin-top:6px;">Net In Hand − Product Cost</div>
+          </div>
+
+          <div class="kpi">
+            <div class="klabel">Profit Health</div>
+            <div class="kval ${health.c}">${health.t}</div>
+            <div class="note" style="margin-top:6px;">${fmt(profitPctRRP)}% of RRP</div>
+          </div>
+
+          <div class="kpi">
+            <div class="klabel">Profit vs RRP</div>
+            <div class="kval">${fmt(profitPctRRP)}%</div>
+            <div class="note" style="margin-top:6px;">Out of what the customer paid, you kept this.</div>
+          </div>
+
+          <div class="kpi">
+            <div class="klabel">Profit vs Invoice</div>
+            <div class="kval">${fmt(profitPctInvoice)}%</div>
+            <div class="note" style="margin-top:6px;">Your internal wholesale margin.</div>
+          </div>
+        </div>
+      `;
+    }
+
 
     // ---- Profit Margin calculation (raw margin)
     function calculateProfitMargin(){
@@ -1653,6 +1832,7 @@
     // ---- Buttons
     $("btnAmzQuick").addEventListener("click", calculateAmazonQuick);
     $("btnAmzAdv").addEventListener("click", calculateAmazonAdv);
+    $("btnAmzVC").addEventListener("click", calculateAmazonVC);
     $("btnNoon").addEventListener("click", calculateNoon);
     $("btnProfit").addEventListener("click", calculateProfitMargin);
 
@@ -1672,6 +1852,13 @@
       $("a_sp").focus();
     });
 
+    $("btnAmzVCClear").addEventListener("click", () => {
+      $("vc_rrp").value = "";
+      $("vc_invoice").value = "";
+      $("vc_cost").value = "";
+      $("output").innerHTML = `<div class="row"><span>Cleared</span><strong>Vendor Central</strong></div>`;
+      $("vc_rrp").focus();
+    });
 
     $("btnProfitClear").addEventListener("click", () => {
       $("pm_cp").value = "";
@@ -1696,6 +1883,7 @@
 
       const mode = localStorage.getItem("freewill_amz_mode") || "quick";
       if (mode === "quick") calculateAmazonQuick();
+      else if (mode === "vc") calculateAmazonVC();
       else calculateAmazonAdv();
     });
     // ---- Floating Calculator
@@ -1833,6 +2021,7 @@
     loadQuickSettings();
     loadAdvSettings();
     loadProfitSettings();
+    loadVCSettings();
 
     
     window.addEventListener('DOMContentLoaded', wireCalculator);
@@ -1843,7 +2032,6 @@
     setActiveTab("amz");
   </script>
 
-  <!-- Floating Calculator -->
   <div id="calcFab" class="calc-fab" role="button" tabindex="0" aria-label="Open calculator" title="Calculator (Alt+C)">
     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <path d="M7 2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="2"/>
