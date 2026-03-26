@@ -1,2092 +1,1047 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Freewill Tools — Marketplace Calculators</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Freewill — Marketplace Calculators</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg:        #090c10;
+  --bg1:       #0d1117;
+  --bg2:       #131920;
+  --bg3:       #1a2330;
+  --border:    rgba(255,255,255,0.06);
+  --border2:   rgba(255,255,255,0.10);
+  --border3:   rgba(255,255,255,0.16);
+  --text:      #f0f4f8;
+  --text2:     #8b96a8;
+  --text3:     #4d5a6b;
+  --accent:    #00d4ff;
+  --accent2:   #0099cc;
+  --green:     #00e5a0;
+  --green-dim: rgba(0,229,160,0.12);
+  --red:       #ff4d6a;
+  --red-dim:   rgba(255,77,106,0.12);
+  --amber:     #ffb800;
+  --amber-dim: rgba(255,184,0,0.12);
+  --blue:      #4d8fff;
+  --blue-dim:  rgba(77,143,255,0.12);
+  --r: 14px;
+  --r-sm: 8px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{font-size:15px;scroll-behavior:smooth}
+body{
+  font-family:'Syne',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
 
-  <style>
-    :root{
-      --bg0:#05070b;
-      --bg1:#070b12;
-      --card: rgba(16, 23, 38, 0.68);
-      --stroke: rgba(255,255,255,0.10);
-      --text:#e8eefc;
-      --muted:#a8b3cf;
-      --muted2:#7f8aa8;
+/* Background mesh */
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background:
+    radial-gradient(ellipse 800px 600px at 10% 0%, rgba(0,212,255,0.04) 0%, transparent 60%),
+    radial-gradient(ellipse 600px 500px at 90% 80%, rgba(0,229,160,0.03) 0%, transparent 60%),
+    radial-gradient(ellipse 400px 400px at 50% 50%, rgba(77,143,255,0.02) 0%, transparent 60%);
+  pointer-events:none;z-index:0;
+}
 
-      --blue:#5aa7ff;
-      --cyan:#38bdf8;
-      --green:#4ade80;
-      --red:#fb7185;
-      --amber:#fbbf24;
+.page{
+  position:relative;z-index:1;
+  max-width:1100px;
+  margin:0 auto;
+  padding:40px 20px 80px;
+}
 
-      --shadow: 0 18px 55px rgba(0,0,0,0.55);
-      --shadow2: 0 10px 30px rgba(0,0,0,0.45);
-      --radius: 18px;
-      --radius2: 14px;
+/* ── Header ── */
+.header{margin-bottom:36px;animation:fadeUp .5s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 
-      --control-h: 48px;
-      --gap: 10px;
-    }
+.header-inner{
+  display:flex;align-items:flex-start;
+  justify-content:space-between;gap:20px;flex-wrap:wrap;
+}
+.logo-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.logo-mark{
+  width:32px;height:32px;border-radius:8px;
+  background:linear-gradient(135deg,var(--accent),var(--blue));
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;font-weight:800;color:#000;letter-spacing:-1px;
+}
+.logo-name{font-size:13px;font-weight:600;color:var(--text2);letter-spacing:.06em;text-transform:uppercase}
+h1{font-size:28px;font-weight:800;letter-spacing:-.6px;line-height:1.1;color:var(--text)}
+.header-sub{margin-top:6px;font-size:13px;color:var(--text2);font-weight:400;letter-spacing:.01em}
 
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      color:var(--text);
-      background:
-        radial-gradient(1200px 700px at 20% -10%, rgba(90,167,255,0.22), transparent 55%),
-        radial-gradient(900px 600px at 110% 10%, rgba(56,189,248,0.18), transparent 60%),
-        radial-gradient(900px 700px at 40% 120%, rgba(74,222,128,0.10), transparent 60%),
-        linear-gradient(180deg, var(--bg0), var(--bg1));
-      overflow-x:hidden;
-    }
+.header-badge{
+  display:flex;align-items:center;gap:8px;
+  background:var(--bg2);
+  border:1px solid var(--border2);
+  border-radius:var(--r-sm);
+  padding:10px 14px;
+  font-size:12px;color:var(--text2);
+  white-space:nowrap;
+  animation:fadeUp .5s .1s ease both;
+}
+.kbd{
+  display:inline-flex;align-items:center;justify-content:center;
+  background:var(--bg3);border:1px solid var(--border3);
+  border-radius:5px;padding:1px 7px;
+  font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text);
+}
 
-    .wrap{
-      max-width: 1120px;
-      margin: 0 auto;
-      padding: 34px 18px 42px;
-    }
+/* ── Layout ── */
+.layout{
+  display:grid;
+  grid-template-columns:1fr 420px;
+  gap:16px;align-items:start;
+}
+@media(max-width:960px){.layout{grid-template-columns:1fr}}
 
-    /* Top bar */
-    .topbar{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:16px;
-      margin-bottom:18px;
-    }
-    .brand{
-      display:flex;
-      flex-direction:column;
-      gap:6px;
-      max-width: 860px;
-    }
-    .badge{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      width: fit-content;
-      padding: 6px 10px;
-      border:1px solid var(--stroke);
-      border-radius: 999px;
-      background: rgba(255,255,255,0.04);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
-      color: var(--muted);
-      font-size: 12px;
-      letter-spacing: .2px;
-    }
-    .dot{
-      width:8px;height:8px;border-radius:50%;
-      background: linear-gradient(135deg, var(--blue), var(--cyan));
-      box-shadow: 0 0 0 3px rgba(90,167,255,0.18);
-    }
-    h1{
-      margin: 2px 0 0;
-      font-size: 28px;
-      line-height: 1.15;
-      letter-spacing: -0.4px;
-    }
-    .sub{
-      margin: 0;
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.4;
-    }
+/* ── Card base ── */
+.card{
+  background:var(--bg1);
+  border:1px solid var(--border2);
+  border-radius:var(--r);
+  overflow:hidden;
+  animation:fadeUp .5s .15s ease both;
+}
 
-    .meta{
-      text-align:right;
-      color: var(--muted2);
-      font-size: 12px;
-      line-height:1.4;
-      user-select:none;
-      min-width: 240px;
-    }
-    .meta strong{color: var(--text); font-weight:600;}
+/* ── Tabs ── */
+.tabs{
+  display:flex;gap:2px;
+  background:var(--bg);
+  border-bottom:1px solid var(--border);
+  padding:8px 8px 0;
+}
+.tab{
+  appearance:none;border:none;background:transparent;
+  color:var(--text3);
+  font-family:'Syne',sans-serif;font-size:13px;font-weight:600;
+  padding:10px 16px 11px;
+  border-radius:var(--r-sm) var(--r-sm) 0 0;
+  cursor:pointer;
+  transition:color .18s,background .18s;
+  letter-spacing:.01em;
+  position:relative;
+}
+.tab::after{
+  content:'';position:absolute;bottom:0;left:8px;right:8px;
+  height:2px;background:var(--accent);border-radius:2px;
+  transform:scaleX(0);transition:transform .2s ease;
+}
+.tab:hover{color:var(--text2);background:var(--bg2)}
+.tab.active{color:var(--text);background:var(--bg1)}
+.tab.active::after{transform:scaleX(1)}
 
-    /* Main card */
-    .card{
-      border: 1px solid var(--stroke);
-      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(14px);
-      overflow:hidden;
-    }
+/* ── Card body ── */
+.card-body{padding:20px}
 
-    .card-header{
-      padding: 16px 16px 0;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 12px;
-      flex-wrap:wrap;
-    }
+/* ── Subtabs ── */
+.subtabs{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:6px;margin-bottom:20px;
+  background:var(--bg);border:1px solid var(--border);
+  border-radius:var(--r-sm);padding:4px;
+}
+.subtab{
+  appearance:none;border:1px solid transparent;background:transparent;
+  color:var(--text3);
+  font-family:'Syne',sans-serif;font-size:12px;font-weight:600;
+  padding:9px 8px;border-radius:6px;
+  cursor:pointer;transition:all .18s ease;text-align:center;
+}
+.subtab small{display:block;font-size:10px;font-weight:400;opacity:.7;margin-top:1px}
+.subtab:hover{color:var(--text2)}
+.subtab.active{background:var(--bg3);color:var(--text);border-color:var(--border3)}
 
-    /* Tabs */
-    .tabs{
-      display:flex;
-      gap:8px;
-      padding: 10px;
-      border-radius: 999px;
-      border:1px solid var(--stroke);
-      background: rgba(0,0,0,0.25);
-      backdrop-filter: blur(10px);
-      box-shadow: var(--shadow2);
-    }
-    .tab{
-      appearance:none;
-      border: 1px solid transparent;
-      background: transparent;
-      color: var(--muted);
-      padding: 10px 12px;
-      border-radius: 999px;
-      font-weight: 650;
-      font-size: 13px;
-      letter-spacing: 0.2px;
-      cursor: pointer;
-      transition: transform .15s ease, background .2s ease, border .2s ease, color .2s ease;
-      user-select:none;
-      white-space: nowrap;
-    }
-    .tab:hover{transform: translateY(-1px); color: var(--text);}
-    .tab.active{
-      color: #04121f;
-      background: linear-gradient(135deg, var(--blue), var(--cyan));
-      border-color: rgba(255,255,255,0.25);
-      box-shadow: 0 14px 30px rgba(56,189,248,0.20);
-    }
+/* ── Section label ── */
+.slabel{
+  font-size:10px;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--text3);
+  margin-bottom:12px;
+}
 
-    .actions{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      color: var(--muted2);
-      font-size: 12px;
-      flex-wrap: wrap;
-    }
-    .pill{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding: 8px 10px;
-      border-radius: 999px;
-      border: 1px solid var(--stroke);
-      background: rgba(0,0,0,0.20);
-      user-select:none;
-    }
-    .kbd{
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-      padding: 2px 6px;
-      border:1px solid var(--stroke);
-      border-bottom-color: rgba(255,255,255,0.18);
-      border-radius: 8px;
-      background: rgba(255,255,255,0.06);
-      color: var(--muted);
-      font-size: 11px;
-    }
+/* ── Grid ── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:480px){.g2{grid-template-columns:1fr}}
 
-    .card-body{
-      display:grid;
-      grid-template-columns: 1.08fr 0.92fr;
-      gap: 14px;
-      padding: 14px;
-    }
-    @media (max-width: 980px){
-      .card-body{grid-template-columns: 1fr;}
-      .meta{text-align:left}
-    }
+/* ── Field ── */
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-size:11px;font-weight:600;color:var(--text2);letter-spacing:.02em}
+.inp-wrap{position:relative}
+input[type=number],select{
+  width:100%;height:46px;
+  padding:0 52px 0 14px;
+  background:var(--bg2);
+  border:1px solid var(--border2);
+  border-radius:var(--r-sm);
+  font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:400;
+  color:var(--text);
+  outline:none;
+  transition:border-color .15s,box-shadow .15s,background .15s;
+  -moz-appearance:textfield;
+}
+input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appearance:none}
+input:focus,select:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px rgba(0,212,255,0.10);
+  background:var(--bg3);
+}
+input::placeholder{color:var(--text3);font-size:13px}
+select{padding-right:14px;cursor:pointer}
+.suffix{
+  position:absolute;right:10px;top:50%;transform:translateY(-50%);
+  font-size:10px;font-weight:600;color:var(--text3);
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:4px;padding:2px 6px;
+  font-family:'JetBrains Mono',monospace;
+  pointer-events:none;
+}
 
-    .panel{
-      background: var(--card);
-      border: 1px solid var(--stroke);
-      border-radius: var(--radius2);
-      padding: 14px;
-      box-shadow: var(--shadow2);
-      backdrop-filter: blur(12px);
-    }
+/* ── Divider ── */
+.div{height:1px;background:var(--border);margin:16px 0}
 
-    .panel-title{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-      margin-bottom: 12px;
-    }
-    .panel-title h2{
-      margin:0;
-      font-size: 15px;
-      letter-spacing: -0.2px;
-    }
-    .hint{
-      color: var(--muted2);
-      font-size: 12px;
-    }
+/* ── Collapsible ── */
+details{
+  border:1px solid var(--border);border-radius:var(--r-sm);
+  overflow:hidden;margin-top:14px;
+}
+summary{
+  list-style:none;cursor:pointer;
+  padding:10px 14px;
+  font-size:11px;font-weight:700;
+  color:var(--text2);background:var(--bg2);
+  display:flex;align-items:center;justify-content:space-between;
+  user-select:none;letter-spacing:.02em;
+  transition:color .15s;
+}
+summary:hover{color:var(--text)}
+summary::after{content:'▾';font-size:10px;transition:transform .2s}
+details[open] summary::after{transform:rotate(-180deg)}
+.det-body{padding:14px;background:var(--bg1)}
 
-    /* Form */
-    .grid{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: var(--gap);
-    }
-    @media (max-width: 520px){
-      .grid{grid-template-columns:1fr;}
-    }
+/* ── Buttons ── */
+.btn-row{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:16px}
+.btn{
+  height:46px;border:none;border-radius:var(--r-sm);
+  font-family:'Syne',sans-serif;font-size:13px;font-weight:700;
+  cursor:pointer;transition:all .16s ease;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  letter-spacing:.02em;
+}
+.btn-p{
+  background:linear-gradient(135deg,var(--accent),var(--blue));
+  color:#000;padding:0 24px;
+}
+.btn-p:hover{filter:brightness(1.1);transform:translateY(-1px)}
+.btn-p:active{transform:translateY(0);filter:brightness(.95)}
+.btn-g{
+  background:var(--bg2);color:var(--text2);
+  border:1px solid var(--border2);padding:0 16px;
+  font-size:12px;
+}
+.btn-g:hover{color:var(--text);border-color:var(--border3)}
 
-    label{
-      display:block;
-      font-size: 12px;
-      color: var(--muted);
-      font-weight: 700;
-      margin-bottom: 6px;
-      letter-spacing: .15px;
-    }
+/* ── Result card ── */
+.result-card{
+  background:var(--bg1);border:1px solid var(--border2);
+  border-radius:var(--r);overflow:hidden;
+  position:sticky;top:20px;
+  animation:fadeUp .5s .25s ease both;
+}
+.result-head{
+  padding:16px 18px;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--bg);
+}
+.result-head-left{display:flex;align-items:center;gap:10px}
+.result-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--accent);
+  box-shadow:0 0 8px var(--accent);
+  animation:pulse 2s ease infinite;
+}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.result-head h2{font-size:14px;font-weight:700;color:var(--text);letter-spacing:.02em}
+.result-mode{
+  font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--text3);
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:4px;padding:3px 8px;
+  font-family:'JetBrains Mono',monospace;
+}
+.result-body{padding:18px;min-height:260px}
 
-    .field{
-      position: relative;
-    }
+/* ── Empty state ── */
+.empty{
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;text-align:center;
+  padding:40px 20px;gap:10px;
+}
+.empty-icon{
+  width:48px;height:48px;border-radius:12px;
+  background:var(--bg2);border:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;margin-bottom:4px;
+}
+.empty p{font-size:13px;color:var(--text3);line-height:1.6;font-weight:400}
 
-    input, select{
-      width:100%;
-      height: var(--control-h);
-      padding: 12px 58px 12px 12px; /* right space for AED */
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.12);
-      background: rgba(0,0,0,0.35);
-      color: var(--text);
-      outline: none;
-      font-size: 14px;
-      transition: border .18s ease, box-shadow .18s ease, transform .15s ease;
-    }
-    select{ padding-right: 12px; } /* no AED suffix on select */
-    input::placeholder{color: rgba(168,179,207,0.55)}
-    input:focus, select:focus{
-      border-color: rgba(90,167,255,0.55);
-      box-shadow: 0 0 0 4px rgba(90,167,255,0.18);
-    }
+/* ── Result rows ── */
+.rrow{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 0;
+  border-bottom:1px solid var(--border);
+  font-size:13px;
+  animation:slideIn .25s ease both;
+}
+@keyframes slideIn{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:translateX(0)}}
+.rrow:last-child{border-bottom:none}
+.rlabel{color:var(--text2);font-weight:500}
+.rval{
+  font-family:'JetBrains Mono',monospace;
+  font-size:13px;font-weight:500;color:var(--text);
+}
+.rdiv{height:1px;background:var(--border2);margin:10px 0}
 
-    .suffix{
-      position:absolute;
-      right: 10px;
-      top: calc(50% + 12px);
-      transform: translateY(-50%);
-      height: 24px;
-      display:flex;
-      align-items:center;
-      padding: 0 8px;
-      color: rgba(168,179,207,0.70);
-      font-size: 12px;
-      border: 1px solid rgba(255,255,255,0.10);
-      background: rgba(255,255,255,0.05);
-      border-radius: 999px;
-      pointer-events:none;
-    }
+/* ── Big profit number ── */
+.profit-hero{
+  background:var(--bg2);border:1px solid var(--border2);
+  border-radius:var(--r-sm);padding:16px;margin:14px 0;
+  text-align:center;
+  animation:slideIn .3s .1s ease both;
+}
+.profit-hero .ph-label{
+  font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--text3);margin-bottom:6px;
+}
+.profit-hero .ph-val{
+  font-family:'JetBrains Mono',monospace;
+  font-size:28px;font-weight:500;letter-spacing:-1px;
+  transition:color .3s;
+}
+.ph-good{color:var(--green)}
+.ph-bad{color:var(--red)}
+.ph-warn{color:var(--amber)}
 
-    /* Subtabs (inside Amazon) */
-    .subtabs{
-      display:flex;
-      gap:8px;
-      margin: 0 0 12px;
-      padding: 8px;
-      border-radius: 14px;
-      border:1px solid rgba(255,255,255,0.10);
-      background: rgba(0,0,0,0.18);
-    }
-    .subtab{
-      appearance:none;
-      border: 1px solid rgba(255,255,255,0.10);
-      background: rgba(255,255,255,0.04);
-      color: var(--muted);
-      padding: 10px 12px;
-      border-radius: 12px;
-      font-weight: 800;
-      font-size: 12px;
-      cursor:pointer;
-      transition: transform .15s ease, filter .2s ease, background .2s ease, color .2s ease;
-      user-select:none;
-      flex: 1;
-      text-align:center;
-    }
-    .subtab:hover{transform: translateY(-1px); color: var(--text);}
-    .subtab.active{
-      color: #04121f;
-      background: linear-gradient(135deg, var(--blue), var(--cyan));
-      border-color: rgba(255,255,255,0.25);
-      box-shadow: 0 14px 30px rgba(56,189,248,0.15);
-    }
-    .subtab small{
-      display:block;
-      font-weight: 700;
-      opacity:.75;
-      margin-top: 2px;
-    }
+/* ── KPI cards ── */
+.kpi-row{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:8px;margin:14px 0;
+}
+.kpi-row.kpi-2{grid-template-columns:1fr 1fr}
+.kpi{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--r-sm);padding:10px 12px;
+  animation:slideIn .3s ease both;
+}
+.kpi-label{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text3)}
+.kpi-val{
+  font-family:'JetBrains Mono',monospace;
+  font-size:17px;font-weight:500;margin-top:4px;
+  letter-spacing:-.5px;
+}
+.good{color:var(--green)}
+.bad{color:var(--red)}
+.warn{color:var(--amber)}
+.blue{color:var(--blue)}
 
-    /* Buttons */
-    .btnrow{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: var(--gap);
-      margin-top: 14px;
-    }
-    @media (max-width: 520px){
-      .btnrow{grid-template-columns: 1fr;}
-    }
+/* ── Status badge ── */
+.status{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:11px;font-weight:700;padding:4px 10px;
+  border-radius:999px;letter-spacing:.04em;
+  margin-top:8px;
+}
+.s-good{background:var(--green-dim);color:var(--green);border:1px solid rgba(0,229,160,.2)}
+.s-bad{background:var(--red-dim);color:var(--red);border:1px solid rgba(255,77,106,.2)}
+.s-warn{background:var(--amber-dim);color:var(--amber);border:1px solid rgba(255,184,0,.2)}
 
-    .btn{
-      width: 100%;
-      height: var(--control-h);
-      border: none;
-      border-radius: 14px;
-      padding: 0 14px;
-      font-weight: 900;
-      letter-spacing: .2px;
-      cursor:pointer;
-      transition: transform .15s ease, box-shadow .2s ease, filter .2s ease;
-      user-select:none;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-    }
-    .btn-primary{
-      color: #04121f;
-      background: linear-gradient(135deg, var(--blue), var(--cyan));
-      box-shadow: 0 16px 35px rgba(56,189,248,0.18);
-    }
-    .btn-primary:hover{transform: translateY(-1px); filter: brightness(1.02);}
-    .btn-ghost{
-      color: var(--muted);
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.10);
-    }
-    .btn-ghost:hover{transform: translateY(-1px); color: var(--text);}
+/* ── Fee bar ── */
+.fee-section{margin:14px 0}
+.fee-title{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:10px}
+.fee-track{
+  height:8px;background:var(--bg3);border-radius:999px;
+  overflow:hidden;display:flex;margin-bottom:12px;
+  border:1px solid var(--border);
+}
+.fee-seg{
+  height:100%;transition:width .6s cubic-bezier(.4,0,.2,1);
+  position:relative;
+}
+.fee-legend{display:flex;flex-wrap:wrap;gap:8px}
+.fee-leg-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2)}
+.fee-leg-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+.fee-leg-pct{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3)}
 
-    /* Receipt */
-    .receipt{
-      background: linear-gradient(180deg, rgba(0,0,0,0.40), rgba(0,0,0,0.22));
-      border: 1px solid rgba(255,255,255,0.10);
-      border-radius: 14px;
-      padding: 14px;
-      min-height: 160px;
-      position: relative;
-      overflow:hidden;
-    }
-    .receipt::before{
-      content:"";
-      position:absolute; inset:-2px;
-      background: radial-gradient(420px 180px at 10% 0%, rgba(90,167,255,0.22), transparent 55%),
-                  radial-gradient(320px 200px at 90% 10%, rgba(56,189,248,0.14), transparent 60%);
-      pointer-events:none;
-      opacity: .65;
-    }
-    .receipt > *{position:relative}
+/* ── Note ── */
+.note{font-size:12px;color:var(--text3);line-height:1.6;margin-top:8px;font-weight:400}
+.note-warn{
+  background:var(--amber-dim);color:var(--amber);
+  border:1px solid rgba(255,184,0,.2);
+  border-radius:var(--r-sm);padding:8px 12px;
+  font-size:12px;margin-top:10px;font-weight:600;
+}
 
-    .row{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      padding: 8px 0;
-      border-bottom: 1px dashed rgba(255,255,255,0.10);
-      font-size: 13px;
-      color: var(--muted);
-    }
-    .row:last-child{border-bottom:none}
-    .row strong{color: var(--text); font-weight:800}
-    .subrow{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      padding: 6px 0 0;
-      font-size: 12px;
-      color: rgba(168,179,207,0.85);
-    }
+/* ── Result footer ── */
+.result-footer{
+  padding:10px 18px;border-top:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  font-size:10px;color:var(--text3);
+  font-family:'JetBrains Mono',monospace;
+  background:var(--bg);
+}
 
-    .divider{
-      height:1px;
-      background: rgba(255,255,255,0.10);
-      margin: 10px 0;
-    }
+/* ── Toast ── */
+.toast{
+  position:fixed;bottom:24px;left:50%;
+  transform:translateX(-50%) translateY(60px);
+  background:var(--bg2);color:var(--text);
+  border:1px solid var(--border3);
+  padding:9px 20px;border-radius:999px;
+  font-size:12px;font-weight:600;
+  opacity:0;transition:all .22s ease;
+  pointer-events:none;z-index:999;
+  box-shadow:0 8px 32px rgba(0,0,0,.4);
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-    .kpis{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 10px;
-    }
-    @media (max-width: 520px){ .kpis{grid-template-columns:1fr;} }
-
-    .kpi{
-      border: 1px solid rgba(255,255,255,0.10);
-      background: rgba(255,255,255,0.03);
-      border-radius: 14px;
-      padding: 10px 12px;
-    }
-    .kpi .klabel{
-      color: rgba(168,179,207,0.78);
-      font-size: 12px;
-      font-weight: 800;
-    }
-    .kpi .kval{
-      margin-top: 6px;
-      font-size: 18px;
-      font-weight: 950;
-      letter-spacing: -0.2px;
-    }
-    .good{color: var(--green)}
-    .bad{color: var(--red)}
-    .warn{color: var(--amber)}
-
-    .note{
-      margin-top:10px;
-      color: rgba(168,179,207,0.75);
-      font-size: 12px;
-      line-height: 1.5;
-    }
-
-    /* Collapsible sections */
-    details{
-      margin-top: 14px;
-      border: 1px solid rgba(255,255,255,0.10);
-      background: rgba(255,255,255,0.03);
-      border-radius: 14px;
-      overflow:hidden;
-    }
-    summary{
-      list-style:none;
-      cursor:pointer;
-      padding: 12px 12px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 10px;
-      color: var(--muted);
-      font-weight: 900;
-      user-select:none;
-    }
-    summary::-webkit-details-marker{display:none}
-    .chev{
-      width:10px;height:10px;
-      border-right:2px solid rgba(168,179,207,0.75);
-      border-bottom:2px solid rgba(168,179,207,0.75);
-      transform: rotate(45deg);
-      transition: transform .2s ease;
-    }
-    details[open] .chev{transform: rotate(225deg);}
-    .section{
-      padding: 0 12px 12px;
-    }
-
-    .footer{
-      margin-top: 14px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 10px;
-      color: rgba(168,179,207,0.65);
-      font-size: 12px;
-      padding: 0 6px;
-    }
-    .ver{
-      border: 1px solid rgba(255,255,255,0.10);
-      background: rgba(255,255,255,0.04);
-      padding: 6px 10px;
-      border-radius: 999px;
-    }
-
-    .toast{
-      position: fixed;
-      left: 50%;
-      bottom: 18px;
-      transform: translateX(-50%) translateY(20px);
-      opacity: 0;
-      pointer-events:none;
-      transition: opacity .18s ease, transform .18s ease;
-      background: rgba(0,0,0,0.55);
-      border: 1px solid rgba(255,255,255,0.12);
-      color: var(--text);
-      padding: 10px 12px;
-      border-radius: 999px;
-      backdrop-filter: blur(10px);
-      box-shadow: var(--shadow2);
-      font-size: 13px;
-      z-index: 9999;
-    }
-    .toast.show{
-      opacity: 1;
-      transform: translateX(-50%) translateY(0px);
-    }
-  
-    /* --- Floating Calculator --- */
-    .calc-head{
-      display:flex;
-      align-items:center;
-      justify-content: space-between;
-      gap: 10px;
-      padding: 14px 14px 10px 14px;
-    }
-    .calc-title{
-      display:flex;
-      align-items:center;
-      gap: 8px;
-      font-weight: 700;
-      letter-spacing: 0.2px;
-    }
-    .calc-x{
-      appearance:none;
-      border:none;
-      background: transparent;
-      color: var(--text);
-      width: 32px;
-      height: 32px;
-      border-radius: 10px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      cursor:pointer;
-      font-size: 18px;
-      line-height: 1;
-      padding: 0;
-    }
-    .calc-x:hover{ background: rgba(255,255,255,0.08); }
-    .calc-x:active{ background: rgba(255,255,255,0.12); transform: translateY(0.5px); }
-
-    .calc-fab{
-      position: fixed;
-      right: 18px;
-      bottom: 18px;
-      width: 54px;
-      height: 54px;
-      border-radius: 999px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      cursor:pointer;
-      user-select:none;
-      z-index: 9998;
-      background: linear-gradient(135deg, rgba(56,189,248,0.95), rgba(34,211,238,0.92));
-      color: #04121f;
-      box-shadow: 0 18px 40px rgba(56,189,248,0.22), 0 8px 18px rgba(0,0,0,0.35);
-      border: 1px solid rgba(255,255,255,0.18);
-      transition: transform .15s ease, filter .2s ease;
-    }
-    .calc-fab:hover{ transform: translateY(-1px); filter: brightness(1.02); }
-    .calc-fab:active{ transform: translateY(0px) scale(0.98); }
-    .calc-fab svg{ width: 22px; height: 22px; }
-
-    .calc-overlay{
-      position: fixed;
-      inset: 0;
-      display:none;
-      z-index: 9997;
-      background: rgba(0,0,0,0.45);
-      backdrop-filter: blur(10px);
-    }
-    .calc-overlay.show{ display:block; }
-
-    .calc-panel{
-      position: fixed;
-      right: 18px;
-      bottom: 86px;
-      width: min(330px, calc(100vw - 36px));
-      background: rgba(15,23,42,0.78);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 18px;
-      box-shadow: var(--shadow2);
-      overflow:hidden;
-    }
-    .calc-head{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding: 12px 12px 10px;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-    }
-    .calc-title{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      font-weight: 900;
-      letter-spacing: .2px;
-      color: var(--text);
-    }
-    .calc-title .pill{
-      font-size: 12px;
-      color: var(--muted);
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.08);
-      padding: 4px 8px;
-      border-radius: 999px;
-      font-weight: 800;
-    }
-    .calc-body{ padding: 12px; }
-    .calc-display{
-      width:100%;
-      border-radius: 14px;
-      padding: 12px 12px;
-      background: rgba(0,0,0,0.35);
-      border: 1px solid rgba(255,255,255,0.10);
-      color: var(--text);
-      font-weight: 900;
-      font-size: 18px;
-      letter-spacing: .2px;
-      outline:none;
-    }
-    .calc-sub{
-      margin-top: 6px;
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      color: var(--muted);
-      font-size: 12px;
-    }
-    .calc-grid{
-      margin-top: 10px;
-      display:grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-    }
-    .calc-key{
-      height: 44px;
-      border-radius: 14px;
-      font-weight: 900;
-      letter-spacing: .2px;
-      border: 1px solid rgba(255,255,255,0.10);
-      background: rgba(255,255,255,0.06);
-      color: var(--text);
-      cursor:pointer;
-      transition: transform .12s ease, filter .2s ease;
-    }
-    .calc-key:hover{ transform: translateY(-1px); filter: brightness(1.02); }
-    .calc-key:active{ transform: translateY(0px) scale(0.98); }
-    .calc-key.op{ background: rgba(56,189,248,0.10); border-color: rgba(56,189,248,0.18); }
-    .calc-key.danger{ background: rgba(239,68,68,0.12); border-color: rgba(239,68,68,0.22); }
-    .calc-key.equal{
-      background: linear-gradient(135deg, var(--blue), var(--cyan));
-      color: #04121f;
-      border-color: rgba(255,255,255,0.18);
-      box-shadow: 0 16px 35px rgba(56,189,248,0.18);
-    }
-    .calc-key.wide{ grid-column: span 2; }
-
-  </style>
+/* ── Floating calc ── */
+.calc-fab{
+  position:fixed;bottom:24px;right:24px;
+  width:50px;height:50px;
+  background:linear-gradient(135deg,var(--accent),var(--blue));
+  border:none;border-radius:14px;
+  font-size:20px;cursor:pointer;
+  box-shadow:0 4px 20px rgba(0,212,255,.25);
+  display:flex;align-items:center;justify-content:center;
+  z-index:100;transition:transform .15s,box-shadow .15s;
+  color:#000;font-weight:900;
+}
+.calc-fab:hover{transform:scale(1.06);box-shadow:0 6px 28px rgba(0,212,255,.35)}
+.calc-overlay{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.6);backdrop-filter:blur(4px);
+  display:flex;align-items:flex-end;justify-content:flex-end;
+  padding:88px 24px 90px;z-index:200;
+  opacity:0;pointer-events:none;transition:opacity .2s;
+}
+.calc-overlay.show{opacity:1;pointer-events:all}
+.calc-panel{
+  background:var(--bg1);border:1px solid var(--border3);
+  border-radius:var(--r);overflow:hidden;width:240px;
+  box-shadow:0 20px 60px rgba(0,0,0,.6);
+  transform:translateY(10px);
+  transition:transform .2s ease;
+}
+.calc-overlay.show .calc-panel{transform:translateY(0)}
+.calc-display{
+  width:100%;border:none;
+  background:var(--bg);border-bottom:1px solid var(--border2);
+  padding:14px 16px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:22px;font-weight:400;color:var(--text);
+  text-align:right;outline:none;
+}
+.calc-keys{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:1px;background:var(--border);
+}
+.calc-key{
+  appearance:none;border:none;
+  background:var(--bg1);
+  font-family:'Syne',sans-serif;font-size:14px;font-weight:600;
+  color:var(--text);padding:14px 0;cursor:pointer;
+  transition:background .1s;text-align:center;
+}
+.calc-key:hover{background:var(--bg3)}
+.calc-key.op{color:var(--accent)}
+.calc-key.eq{background:var(--accent);color:#000}
+.calc-key.eq:hover{background:var(--accent2)}
+.calc-key.clr{color:var(--red)}
+</style>
 </head>
-
 <body>
-  <div class="wrap">
-    <div class="topbar">
-      <div class="brand">
-        <div class="badge"><span class="dot"></span> Freewill Tools</div>
+<div class="page">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-inner">
+      <div>
+        <div class="logo-row">
+          <div class="logo-mark">FW</div>
+          <span class="logo-name">Freewill UAE</span>
+        </div>
         <h1>Marketplace Calculators</h1>
-        <p class="sub">
-          Use <b>Quick</b> for gut-checks, <b>Advanced</b> for fees, or <b>Vendor</b> for direct Amazon supply.
-        </p>
+        <p class="header-sub">Amazon · Noon · Profit Margin &nbsp;·&nbsp; All amounts in AED</p>
       </div>
-      <div class="meta">
-        <div><strong>Tip:</strong> Press <span class="kbd">Enter</span> to calculate</div>
-        <div style="margin-top:6px;">Currency: <strong>AED</strong></div>
+      <div class="header-badge">
+        Press <span class="kbd">Enter</span> to calculate &nbsp;·&nbsp; <span class="kbd">Alt+C</span> quick calc
       </div>
     </div>
+  </div>
 
-    <div class="card" role="application" aria-label="Marketplace calculators">
-      <div class="card-header">
-        <div class="tabs" role="tablist" aria-label="Calculator tabs">
-          <button class="tab active" id="tab-amz" role="tab" aria-selected="true" aria-controls="pane-amz">Amazon</button>
-          <button class="tab" id="tab-noon" role="tab" aria-selected="false" aria-controls="pane-noon">Noon Deals</button>
-          <button class="tab" id="tab-profit" role="tab" aria-selected="false" aria-controls="pane-profit">Profit Margin</button>
-        </div>
+  <!-- Layout -->
+  <div class="layout">
 
-        <div class="actions" id="headerPills">
-          </div>
+    <!-- Input card -->
+    <div class="card">
+      <div class="tabs">
+        <button class="tab active" id="tab-amz" onclick="setTab('amz')">Amazon</button>
+        <button class="tab" id="tab-noon" onclick="setTab('noon')">Noon Deals</button>
+        <button class="tab" id="tab-profit" onclick="setTab('profit')">Profit Margin</button>
       </div>
 
       <div class="card-body">
 
-        <div class="panel">
-          <div class="panel-title">
-            <h2 id="formTitle">Amazon Profit</h2>
-            <div class="hint" id="formHint">Choose Quick, Advanced, or Vendor.</div>
+        <!-- Amazon -->
+        <div id="pane-amz">
+          <div class="subtabs">
+            <button class="subtab active" id="sub-quick" onclick="setAmzMode('quick')">Quick<small>Gut check</small></button>
+            <button class="subtab" id="sub-adv" onclick="setAmzMode('adv')">Advanced<small>Seller Central</small></button>
+            <button class="subtab" id="sub-vc" onclick="setAmzMode('vc')">Vendor<small>Vendor Central</small></button>
           </div>
 
-          <div id="pane-amz" role="tabpanel" aria-labelledby="tab-amz">
-            <div class="subtabs" role="tablist" aria-label="Amazon calculator modes">
-              <button class="subtab active" id="subtab-quick" role="tab" aria-selected="true">
-                Quick
-                <small>Gut check</small>
-              </button>
-              <button class="subtab" id="subtab-adv" role="tab" aria-selected="false">
-                Advanced
-                <small>Seller Central</small>
-              </button>
-              <button class="subtab" id="subtab-vc" role="tab" aria-selected="false">
-                Vendor
-                <small>Vendor Central</small>
-              </button>
+          <!-- Quick -->
+          <div id="amz-quick">
+            <div class="slabel">Your prices</div>
+            <div class="g2">
+              <div class="field"><label>Cost Price (CP)</label><div class="inp-wrap"><input type="number" inputmode="decimal" id="amz_cp" placeholder="e.g. 100"/><span class="suffix">AED</span></div></div>
+              <div class="field"><label>Selling Price (SP)</label><div class="inp-wrap"><input type="number" inputmode="decimal" id="amz_sp" placeholder="e.g. 147"/><span class="suffix">AED</span></div></div>
             </div>
-
-            <div id="amz-quick">
-              <div class="grid">
-                <div class="field">
-                  <label for="amz_cp">Cost Price (CP)</label>
-                  <input type="number" inputmode="decimal" id="amz_cp" placeholder="e.g. 100" />
-                  <span class="suffix">AED</span>
-                </div>
-
-                <div class="field">
-                  <label for="amz_sp">Selling Price (SP)</label>
-                  <input type="number" inputmode="decimal" id="amz_sp" placeholder="e.g. 147" />
-                  <span class="suffix">AED</span>
-                </div>
-              </div>
-
-              <div class="btnrow">
-                <button class="btn btn-primary" id="btnAmzQuick">Calculate</button>
-                <button class="btn btn-ghost" id="btnAmzQuickClear" type="button">Clear</button>
-              </div>
-
-              <details>
-                <summary>
-                  Assumptions (editable)
-                  <span class="chev" aria-hidden="true"></span>
-                </summary>
-                <div class="section">
-                  <div class="grid">
-                    <div class="field">
-                      <label for="q_vat_rate">VAT %</label>
-                      <input type="number" inputmode="decimal" id="q_vat_rate" placeholder="5" />
-                    </div>
-                    <div class="field">
-                      <label for="q_delivery_fee">Delivery Fee</label>
-                      <input type="number" inputmode="decimal" id="q_delivery_fee" placeholder="11" />
-                      <span class="suffix">AED</span>
-                    </div>
-                    <div class="field">
-                      <label for="q_fee_threshold">Fee threshold (SP ≤)</label>
-                      <input type="number" inputmode="decimal" id="q_fee_threshold" placeholder="50" />
-                      <span class="suffix">AED</span>
-                    </div>
-                    <div class="field">
-                      <label for="q_fee_low">Fee % (≤ threshold)</label>
-                      <input type="number" inputmode="decimal" id="q_fee_low" placeholder="8" />
-                    </div>
-                    <div class="field">
-                      <label for="q_fee_high">Fee % (> threshold)</label>
-                      <input type="number" inputmode="decimal" id="q_fee_high" placeholder="15" />
-                    </div>
-                    <div class="field">
-                      <label for="q_ppc_cost">PPC / Ads per unit (optional)</label>
-                      <input type="number" inputmode="decimal" id="q_ppc_cost" placeholder="e.g. 2.50" />
-                      <span class="suffix">AED</span>
-                    </div>
-                  </div>
-
-                  <p class="note">
-                    Quick mode is best for speed. If you want settlement-accurate fees (Pick&Pack + Closing + VAT on fees), use <b>Advanced</b>.
-                    Settings are saved in your browser.
-                  </p>
-                </div>
-              </details>
+            <div class="btn-row">
+              <button class="btn btn-p" onclick="calcAmzQuick()">Calculate</button>
+              <button class="btn btn-g" onclick="clearFields(['amz_cp','amz_sp'])">Clear</button>
             </div>
-
-            <div id="amz-adv" style="display:none;">
-              <div class="grid">
-                <div class="field">
-                  <label for="a_sp">Selling Price (SP)</label>
-                  <input type="number" inputmode="decimal" id="a_sp" placeholder="e.g. 60" />
-                  <span class="suffix">AED</span>
-                </div>
-
-                <div class="field">
-                  <label for="a_cp_wholesale">Wholesale Cost (CP)</label>
-                  <input type="number" inputmode="decimal" id="a_cp_wholesale" placeholder="e.g. 28" />
-                  <span class="suffix">AED</span>
-                </div>
-
-                <div class="field">
-                  <label for="a_cp_loaded">Loaded Cost (optional)</label>
-                  <input type="number" inputmode="decimal" id="a_cp_loaded" placeholder="e.g. 35" />
-                  <span class="suffix">AED</span>
-                </div>
-
-                <div class="field">
-                  <label for="a_ppc_cost">PPC / Ads per unit (optional)</label>
-                  <input type="number" inputmode="decimal" id="a_ppc_cost" placeholder="e.g. 2.50" />
-                  <span class="suffix">AED</span>
-                </div>
-              </div>
-
-              <div class="btnrow">
-                <button class="btn btn-primary" id="btnAmzAdv">Calculate</button>
-                <button class="btn btn-ghost" id="btnAmzAdvClear" type="button">Clear</button>
-              </div>
-
-              <details open>
-                <summary>
-                  Fees & Presets (editable)
-                  <span class="chev" aria-hidden="true"></span>
-                </summary>
-                <div class="section">
-                  <div class="grid">
-                    <div class="field">
-                      <label for="a_preset">Fulfilment preset</label>
-                      <select id="a_preset">
-                        <option value="FBA">FBA (default)</option>
-                        <option value="FLEX">Seller Flex</option>
-                        <option value="CUSTOM">Custom</option>
-                      </select>
-                    </div>
-
-                    <div class="field">
-                      <label for="a_vat_rate">VAT % (fees)</label>
-                      <input type="number" inputmode="decimal" id="a_vat_rate" placeholder="5" />
-                    </div>
-
-                    <div class="field">
-                      <label for="a_referral_pct">Referral fee %</label>
-                      <input type="number" inputmode="decimal" id="a_referral_pct" placeholder="15" />
-                    </div>
-
-                    <div class="field">
-                      <label for="a_pickpack">Pick &amp; Pack fee (base)</label>
-                      <input type="number" inputmode="decimal" id="a_pickpack" placeholder="11.25" />
-                      <span class="suffix">AED</span>
-                    </div>
-
-                    <div class="field">
-                      <label for="a_closing_fee">Variable closing fee (base)</label>
-                      <input type="number" inputmode="decimal" id="a_closing_fee" placeholder="0.60" />
-                      <span class="suffix">AED</span>
-                    </div>
-                  </div>
-
-                  <p class="note">
-                    Switch preset to auto-fill fees for your situation. If you edit Pick&amp;Pack/Closing manually, it flips to <b>Custom</b>.
-                    Settings are saved in your browser.
-                  </p>
-                </div>
-              </details>
-
-              <details>
-                <summary>
-                  How the Advanced math works (explain it)
-                  <span class="chev" aria-hidden="true"></span>
-                </summary>
-                <div class="section">
-                  <p class="note" style="margin-top:0;">
-                    <b>1) Fees (incl. VAT)</b><br/>
-                    Referral = SP × referral% (+ VAT)<br/>
-                    Pick &amp; Pack = fixed (+ VAT)<br/>
-                    Closing = fixed (+ VAT)<br/><br/>
-                    <b>2) Amazon payout</b><br/>
-                    Payout = SP − Total Amazon Fees<br/><br/>
-                    <b>3) Profit</b><br/>
-                    Profit (Wholesale) = Payout − Wholesale CP − PPC<br/>
-                    Profit (Loaded) = Payout − Loaded CP − PPC<br/><br/>
-                    <b>4) Percentages</b><br/>
-                    Amazon take % = Total Fees ÷ SP<br/>
-                    Margin % = Profit ÷ SP<br/>
-                    ROI % = Profit ÷ Cost
-                  </p>
-                </div>
-              </details>
-            </div>
-
-            <div id="amz-vc" style="display:none;">
-              <div class="grid">
-                <div class="field">
-                  <label for="vc_rrp">Amazon RRP (Selling Price)</label>
-                  <input type="number" inputmode="decimal" id="vc_rrp" placeholder="e.g. 150" />
-                  <span class="suffix">AED</span>
-                </div>
-
-                <div class="field">
-                  <label for="vc_invoice">Your Invoice Price</label>
-                  <input type="number" inputmode="decimal" id="vc_invoice" placeholder="e.g. 100" />
-                  <span class="suffix">AED</span>
-                </div>
-
-                <div class="field">
-                  <label for="vc_cost">Product Cost (Landed)</label>
-                  <input type="number" inputmode="decimal" id="vc_cost" placeholder="e.g. 60" />
-                  <span class="suffix">AED</span>
-                </div>
-              </div>
-
-              <div class="btnrow">
-                <button class="btn btn-primary" id="btnAmzVC">Calculate</button>
-                <button class="btn btn-ghost" id="btnAmzVCClear" type="button">Clear</button>
-              </div>
-
-              <details>
-                <summary>
-                  Vendor Terms (editable)
-                  <span class="chev" aria-hidden="true"></span>
-                </summary>
-                <div class="section">
-                  <div class="grid">
-                    <div class="field">
-                      <label for="vc_front_margin">Front Margin %</label>
-                      <input type="number" inputmode="decimal" id="vc_front_margin" placeholder="18" />
-                    </div>
-                    <div class="field">
-                      <label for="vc_csa">Back End CSA %</label>
-                      <input type="number" inputmode="decimal" id="vc_csa" placeholder="20" />
-                    </div>
-                  </div>
-                  <p class="note">
-                    Default: 18% Front Margin, 20% Back End CSA (Co-op). Adjust these to match your actual Vendor agreement.
-                  </p>
-                </div>
-              </details>
-            </div>
-          </div>
-
-          <div id="pane-noon" role="tabpanel" aria-labelledby="tab-noon" style="display:none;">
-            <div class="grid">
-              <div class="field">
-                <label for="noon_price">Original Price</label>
-                <input type="number" inputmode="decimal" id="noon_price" placeholder="e.g. 199" />
-                <span class="suffix">AED</span>
-              </div>
-
-              <div class="field">
-                <label for="noon_discount">Discount %</label>
-                <input type="number" inputmode="decimal" id="noon_discount" placeholder="e.g. 15" />
-              </div>
-            </div>
-
-            <div class="btnrow">
-              <button class="btn btn-primary" id="btnNoon">Calculate</button>
-              <button class="btn btn-ghost" id="btnNoonClear" type="button">Clear</button>
-            </div>
-
-            <p class="note">
-              This calculates the deal price after discount. If you want Noon commission + fulfilment fees later,
-              we can add a “Net Profit” mode.
-            </p>
-          </div>
-
-
-          <div id="pane-profit" role="tabpanel" aria-labelledby="tab-profit" style="display:none;">
-            <div class="grid">
-              <div class="field">
-                <label for="pm_cp">Cost Price (CP)</label>
-                <input type="number" inputmode="decimal" id="pm_cp" placeholder="e.g. 35" />
-                <span class="suffix">AED</span>
-              </div>
-
-              <div class="field">
-                <label for="pm_sp">Selling Price (SP)</label>
-                <input type="number" inputmode="decimal" id="pm_sp" placeholder="e.g. 60" />
-                <span class="suffix">AED</span>
-              </div>
-
-              <div class="field">
-                <label for="pm_ads_pct">Spare for Ads (% of profit)</label>
-                <input type="number" inputmode="decimal" id="pm_ads_pct" placeholder="e.g. 25" />
-              </div>
-
-              <div class="field">
-                <label for="pm_other_pct">Other expenses (% of profit)</label>
-                <input type="number" inputmode="decimal" id="pm_other_pct" placeholder="e.g. 10" />
-              </div>
-            </div>
-
-            <div class="btnrow">
-              <button class="btn btn-primary" id="btnProfit">Calculate</button>
-              <button class="btn btn-ghost" id="btnProfitClear" type="button">Clear</button>
-            </div>
-
             <details>
-              <summary>
-                Risk rules (editable)
-                <span class="chev" aria-hidden="true"></span>
-              </summary>
-              <div class="section">
-                <div class="grid">
-                  <div class="field">
-                    <label for="pm_risk_high">High-risk margin % (≤)</label>
-                    <input type="number" inputmode="decimal" id="pm_risk_high" placeholder="7" />
-                  </div>
-                  <div class="field">
-                    <label for="pm_risk_med">Medium-risk margin % (≤)</label>
-                    <input type="number" inputmode="decimal" id="pm_risk_med" placeholder="12" />
-                  </div>
-                  <div class="field">
-                    <label for="pm_risk_ok">OK margin % (≤)</label>
-                    <input type="number" inputmode="decimal" id="pm_risk_ok" placeholder="20" />
-                  </div>
-                  <div class="field">
-                    <label for="pm_rounding">Rounding (AED)</label>
-                    <input type="number" inputmode="decimal" id="pm_rounding" placeholder="0.01" />
-                    <span class="suffix">AED</span>
-                  </div>
+              <summary>Fee assumptions (editable)</summary>
+              <div class="det-body">
+                <div class="g2">
+                  <div class="field"><label>VAT on fees %</label><input type="number" inputmode="decimal" id="q_vat_rate" placeholder="5"/></div>
+                  <div class="field"><label>Delivery fee</label><div class="inp-wrap"><input type="number" inputmode="decimal" id="q_delivery_fee" placeholder="11"/><span class="suffix">AED</span></div></div>
+                  <div class="field"><label>Fee threshold (SP ≤)</label><div class="inp-wrap"><input type="number" inputmode="decimal" id="q_fee_threshold" placeholder="50"/><span class="suffix">AED</span></div></div>
+                  <div class="field"><label>Fee % below threshold</label><input type="number" inputmode="decimal" id="q_fee_low" placeholder="8"/></div>
+                  <div class="field"><label>Fee % above threshold</label><input type="number" inputmode="decimal" id="q_fee_high" placeholder="15"/></div>
+                  <div class="field"><label>PPC / Ads per unit</label><div class="inp-wrap"><input type="number" inputmode="decimal" id="q_ppc_cost" placeholder="0"/><span class="suffix">AED</span></div></div>
                 </div>
+                <p class="note" style="margin-top:10px">Settings auto-saved in your browser.</p>
+              </div>
+            </details>
+          </div>
 
-                <p class="note">
-                  This tool is deliberately “clean”: it ignores marketplace fees. Use it to sanity-check whether the <b>raw margin</b> is even worth fighting for.
-                  Settings are saved in your browser.
-                </p>
+          <!-- Advanced -->
+          <div id="amz-adv" style="display:none">
+            <div class="slabel">Your prices</div>
+            <div class="g2">
+              <div class="field"><label>Selling Price (SP)</label><div class="inp-wrap"><input type="number" inputmode="decimal" id="a_sp" placeholder="e.g. 60"/><span class="suffix">AED</span></div></div>
+              <div class="field"><label>Wholesale Cost (CP)</label><div class="inp-wrap"><input type="number" inputmode="decimal" id="a_cp_wholesale" placeholder="e.g. 28"/><span class="suffix">AED</span></div></div>
+              <div class="field"><label>Loaded Cost (optional)</label><div class="inp-wrap"><input type="number" inputmode="decimal" id="a_cp_loaded" placeholder="e.g. 35"/><span class="suffix">AED</span></div></div>
+              <div class="field"><label>PPC / Ads per unit</label><div class="inp-wrap"><input type="number" inputmode="decimal" id="a_ppc_cost" placeholder="e.g. 2.50"/><span class="suffix">AED</span></div></div>
+            </div>
+            <div class="btn-row">
+              <button class="btn btn-p" onclick="calcAmzAdv()">Calculate</button>
+              <button class="btn btn-g" onclick="clearFields(['a_sp','a_cp_wholesale','a_cp_loaded','a_ppc_cost'])">Clear</button>
+            </div>
+            <details open>
+              <summary>Fee settings & presets</summary>
+              <div class="det-body">
+                <div class="g2">
+                  <div class="field"><label>Fulfilment preset</label><select id="a_preset"><option value="FBA">FBA (default)</option><option value="FLEX">Seller Flex</option><option value="CUSTOM">Custom</option></select></div>
+                  <div class="field"><label>VAT on fees %</label><input type="number" inputmode="decimal" id="a_vat_rate" placeholder="5"/></div>
+                  <div class="field"><label>Referral fee %</label><input type="number" inputmode="decimal" id="a_referral_pct" placeholder="15"/></div>
+                  <div class="field"><label>Pick & Pack fee</label><div class="inp-wrap"><input type="number" inputmode="decimal" id="a_pickpack" placeholder="11.25"/><span class="suffix">AED</span></div></div>
+                  <div class="field"><label>Closing fee</label><div class="inp-wrap"><input type="number" inputmode="decimal" id="a_closing_fee" placeholder="0.60"/><span class="suffix">AED</span></div></div>
+                </div>
+              </div>
+            </details>
+          </div>
+
+          <!-- Vendor Central -->
+          <div id="amz-vc" style="display:none">
+            <div class="slabel">Vendor Central inputs</div>
+            <div class="g2">
+              <div class="field"><label>Amazon RRP</label><div class="inp-wrap"><input type="number" inputmode="decimal" id="vc_rrp" placeholder="e.g. 150"/><span class="suffix">AED</span></div></div>
+              <div class="field"><label>Your Invoice Price</label><div class="inp-wrap"><input type="number" inputmode="decimal" id="vc_invoice" placeholder="e.g. 100"/><span class="suffix">AED</span></div></div>
+              <div class="field"><label>Product Cost (Landed)</label><div class="inp-wrap"><input type="number" inputmode="decimal" id="vc_cost" placeholder="e.g. 60"/><span class="suffix">AED</span></div></div>
+            </div>
+            <div class="btn-row">
+              <button class="btn btn-p" onclick="calcVC()">Calculate</button>
+              <button class="btn btn-g" onclick="clearFields(['vc_rrp','vc_invoice','vc_cost','vc_target'])">Clear</button>
+            </div>
+            <details>
+              <summary>Reverse-calculator: find your invoice price</summary>
+              <div class="det-body">
+                <div class="g2">
+                  <div class="field"><label>Target Amazon margin %</label><input type="number" inputmode="decimal" id="vc_target" placeholder="e.g. 38"/></div>
+                  <div class="field"><label>&nbsp;</label><button class="btn btn-g" onclick="calcVCTarget()" style="height:46px;width:100%">Auto-calc invoice</button></div>
+                </div>
+                <p class="note" style="margin-top:8px">Enter Amazon's target margin % + RRP to reverse-engineer your exact invoice price.</p>
+              </div>
+            </details>
+            <details>
+              <summary>Vendor terms</summary>
+              <div class="det-body">
+                <div class="field"><label>Back End CSA %</label><input type="number" inputmode="decimal" id="vc_csa" placeholder="20"/></div>
+                <p class="note" style="margin-top:8px">Default 20% CSA (Co-op). Adjust to match your actual vendor agreement.</p>
               </div>
             </details>
           </div>
         </div>
 
-        <div class="panel">
-          <div class="panel-title">
-            <h2>Result</h2>
-            <div class="hint" id="resultHint">Shows a clean breakdown.</div>
+        <!-- Noon -->
+        <div id="pane-noon" style="display:none">
+          <div class="slabel">Deal calculator</div>
+          <div class="g2">
+            <div class="field"><label>Original Price</label><div class="inp-wrap"><input type="number" inputmode="decimal" id="noon_price" placeholder="e.g. 199"/><span class="suffix">AED</span></div></div>
+            <div class="field"><label>Discount %</label><input type="number" inputmode="decimal" id="noon_discount" placeholder="e.g. 15"/></div>
           </div>
-
-          <div class="receipt" id="output">
-            <div class="row"><span>Ready.</span><strong>Pick a tool and calculate</strong></div>
-            <div class="note">Your results will appear here with a receipt-style breakdown.</div>
+          <div class="btn-row">
+            <button class="btn btn-p" onclick="calcNoon()">Calculate</button>
+            <button class="btn btn-g" onclick="clearFields(['noon_price','noon_discount'])">Clear</button>
           </div>
-
-          <div class="footer">
-            <div class="ver">v4.0 • Freewill UAE</div>
-            <div>Built for speed, not guesswork.</div>
-          </div>
+          <p class="note" style="margin-top:12px">Shows deal price and savings after discount is applied.</p>
         </div>
 
-      </div>
-    </div>
-  </div>
-
-  <div class="toast" id="toast">Saved</div>
-
-  <script>
-    // ---- Helpers
-    const $ = (id) => document.getElementById(id);
-    const fmt = (n) => Number(n).toFixed(2);
-
-    const toast = (() => {
-      let t;
-      return (msg) => {
-        const el = $("toast");
-        el.textContent = msg;
-        el.classList.add("show");
-        clearTimeout(t);
-        t = setTimeout(() => el.classList.remove("show"), 1400);
-      };
-    })();
-
-    function num(v, d=0){
-      const x = parseFloat(v);
-      return Number.isFinite(x) ? x : d;
-    }
-
-    // ---- Header pills
-    function setHeaderPills(html){
-      $("headerPills").innerHTML = html;
-    }
-
-    // ---- Tabs (Amazon / Noon)
-    
-    function setActiveTab(tab) {
-      const isAmz = tab === "amz";
-      const isNoon = tab === "noon";
-      const isProfit = tab === "profit";
-
-      // Tabs
-      $("tab-amz").classList.toggle("active", isAmz);
-      $("tab-amz").setAttribute("aria-selected", isAmz ? "true" : "false");
-
-      $("tab-noon").classList.toggle("active", isNoon);
-      $("tab-noon").setAttribute("aria-selected", isNoon ? "true" : "false");
-
-      $("tab-profit").classList.toggle("active", isProfit);
-      $("tab-profit").setAttribute("aria-selected", isProfit ? "true" : "false");
-
-      // Panes
-      $("pane-amz").style.display = isAmz ? "" : "none";
-      $("pane-noon").style.display = isNoon ? "" : "none";
-      $("pane-profit").style.display = isProfit ? "" : "none";
-
-      // Titles & hints
-      $("formTitle").textContent = isAmz ? "Amazon Profit" : (isNoon ? "Noon Deal Price" : "Profit Margin");
-      $("formHint").textContent  = isAmz ? "Choose Quick, Advanced, or Vendor." : (isNoon ? "Enter original price and discount %." : "Enter CP + SP to see profit, margin, and spending room.");
-      $("resultHint").textContent = isAmz ? "Receipt breakdown + key percentages." : (isNoon ? "Shows deal price after discount." : "Shows profit, margin %, and how much room you have.");
-
-      // Update pills for the active tab
-      if (isAmz) refreshPillsAmazon();
-      else if (isNoon) refreshPillsNoon();
-      else refreshPillsProfit();
-
-      // friendly output reset
-      const label = isAmz ? "Amazon breakdown" : (isNoon ? "Noon deal price" : "Profit margin");
-      $("output").innerHTML = `
-        <div class="row"><span>Ready.</span><strong>${label}</strong></div>
-        <div class="note">Enter values and calculate.</div>
-      `;
-    }
-
-
-    $("tab-amz").addEventListener("click", () => setActiveTab("amz"));
-    $("tab-noon").addEventListener("click", () => setActiveTab("noon"));
-    $("tab-profit").addEventListener("click", () => setActiveTab("profit"));
-
-    // ---- Amazon mode (Quick / Advanced / Vendor)
-    function setAmazonMode(mode){
-      const isQuick = mode === "quick";
-      const isAdv = mode === "adv";
-      const isVC = mode === "vc";
-
-      $("subtab-quick").classList.toggle("active", isQuick);
-      $("subtab-quick").setAttribute("aria-selected", isQuick ? "true" : "false");
-      $("amz-quick").style.display = isQuick ? "" : "none";
-
-      $("subtab-adv").classList.toggle("active", isAdv);
-      $("subtab-adv").setAttribute("aria-selected", isAdv ? "true" : "false");
-      $("amz-adv").style.display = isAdv ? "" : "none";
-
-      $("subtab-vc").classList.toggle("active", isVC);
-      $("subtab-vc").setAttribute("aria-selected", isVC ? "true" : "false");
-      $("amz-vc").style.display = isVC ? "" : "none";
-
-      localStorage.setItem("freewill_amz_mode", mode);
-
-      refreshPillsAmazon();
-      
-      let label = "Amazon Quick mode";
-      if(isAdv) label = "Amazon Advanced mode";
-      if(isVC) label = "Vendor Central mode";
-
-      $("output").innerHTML = `
-        <div class="row"><span>Ready.</span><strong>${label}</strong></div>
-        <div class="note">Enter values and calculate.</div>
-      `;
-    }
-
-    $("subtab-quick").addEventListener("click", () => setAmazonMode("quick"));
-    $("subtab-adv").addEventListener("click", () => setAmazonMode("adv"));
-    $("subtab-vc").addEventListener("click", () => setAmazonMode("vc"));
-
-    // ---- Quick settings persistence
-    const Q_DEFAULTS = {
-      q_vat_rate: 5,
-      q_delivery_fee: 11,
-      q_fee_threshold: 50,
-      q_fee_low: 8,
-      q_fee_high: 15,
-      q_ppc_cost: 0
-    };
-
-    function loadQuickSettings(){
-      const saved = JSON.parse(localStorage.getItem("freewill_amz_quick_settings") || "null");
-      const s = { ...Q_DEFAULTS, ...(saved || {}) };
-
-      $("q_vat_rate").value = s.q_vat_rate;
-      $("q_delivery_fee").value = s.q_delivery_fee;
-      $("q_fee_threshold").value = s.q_fee_threshold;
-      $("q_fee_low").value = s.q_fee_low;
-      $("q_fee_high").value = s.q_fee_high;
-      $("q_ppc_cost").value = s.q_ppc_cost;
-
-      return s;
-    }
-
-    function getQuickSettings(){
-      return {
-        q_vat_rate: num($("q_vat_rate").value, Q_DEFAULTS.q_vat_rate),
-        q_delivery_fee: num($("q_delivery_fee").value, Q_DEFAULTS.q_delivery_fee),
-        q_fee_threshold: num($("q_fee_threshold").value, Q_DEFAULTS.q_fee_threshold),
-        q_fee_low: num($("q_fee_low").value, Q_DEFAULTS.q_fee_low),
-        q_fee_high: num($("q_fee_high").value, Q_DEFAULTS.q_fee_high),
-        q_ppc_cost: num($("q_ppc_cost").value, Q_DEFAULTS.q_ppc_cost),
-      };
-    }
-
-    function saveQuickSettings(){
-      const s = getQuickSettings();
-      localStorage.setItem("freewill_amz_quick_settings", JSON.stringify(s));
-      refreshPillsAmazon();
-      toast("Assumptions saved");
-    }
-
-    ["q_vat_rate","q_delivery_fee","q_fee_threshold","q_fee_low","q_fee_high","q_ppc_cost"].forEach(id=>{
-      $(id).addEventListener("change", saveQuickSettings);
-      $(id).addEventListener("blur", saveQuickSettings);
-    });
-
-    // ---- Advanced settings persistence + presets
-    const A_DEFAULTS = {
-      a_preset: "FBA",
-      a_vat_rate: 5,
-      a_referral_pct: 15,
-      a_pickpack: 11.25,
-      a_closing_fee: 0.60,
-      // Presets (you can adjust later in code if needed)
-      preset_fba_pickpack: 11.25,
-      preset_fba_closing: 0.60,
-      preset_flex_pickpack: 11.25,
-      preset_flex_closing: 0.60
-    };
-
-    function loadAdvSettings(){
-      const saved = JSON.parse(localStorage.getItem("freewill_amz_adv_settings") || "null");
-      const s = { ...A_DEFAULTS, ...(saved || {}) };
-
-      $("a_preset").value = s.a_preset;
-      $("a_vat_rate").value = s.a_vat_rate;
-      $("a_referral_pct").value = s.a_referral_pct;
-      $("a_pickpack").value = s.a_pickpack;
-      $("a_closing_fee").value = s.a_closing_fee;
-
-      return s;
-    }
-
-    function getAdvSettings(){
-      return {
-        a_preset: $("a_preset").value || "CUSTOM",
-        a_vat_rate: num($("a_vat_rate").value, A_DEFAULTS.a_vat_rate),
-        a_referral_pct: num($("a_referral_pct").value, A_DEFAULTS.a_referral_pct),
-        a_pickpack: num($("a_pickpack").value, A_DEFAULTS.a_pickpack),
-        a_closing_fee: num($("a_closing_fee").value, A_DEFAULTS.a_closing_fee),
-        // keep preset slots
-        preset_fba_pickpack: A_DEFAULTS.preset_fba_pickpack,
-        preset_fba_closing: A_DEFAULTS.preset_fba_closing,
-        preset_flex_pickpack: A_DEFAULTS.preset_flex_pickpack,
-        preset_flex_closing: A_DEFAULTS.preset_flex_closing
-      };
-    }
-
-    function saveAdvSettings(msg="Fees saved"){
-      const s = getAdvSettings();
-      localStorage.setItem("freewill_amz_adv_settings", JSON.stringify(s));
-      refreshPillsAmazon();
-      toast(msg);
-    }
-
-    function applyPreset(preset){
-      // Read stored settings (so we don't lose user-changed VAT/Referral)
-      const current = getAdvSettings();
-
-      if (preset === "FBA"){
-        $("a_pickpack").value = A_DEFAULTS.preset_fba_pickpack;
-        $("a_closing_fee").value = A_DEFAULTS.preset_fba_closing;
-      } else if (preset === "FLEX"){
-        $("a_pickpack").value = A_DEFAULTS.preset_flex_pickpack;
-        $("a_closing_fee").value = A_DEFAULTS.preset_flex_closing;
-      }
-      $("a_preset").value = preset;
-      saveAdvSettings("Preset applied");
-    }
-
-    $("a_preset").addEventListener("change", (e)=>{
-      const v = e.target.value;
-      if (v === "FBA" || v === "FLEX") applyPreset(v);
-      else saveAdvSettings("Fees saved");
-    });
-
-    // If user edits fees manually -> switch to CUSTOM automatically
-    function markCustom(){
-      if ($("a_preset").value !== "CUSTOM"){
-        $("a_preset").value = "CUSTOM";
-      }
-      saveAdvSettings("Fees saved");
-    }
-
-    ["a_vat_rate","a_referral_pct"].forEach(id=>{
-      $(id).addEventListener("change", saveAdvSettings);
-      $(id).addEventListener("blur", saveAdvSettings);
-    });
-    ["a_pickpack","a_closing_fee"].forEach(id=>{
-      $(id).addEventListener("change", markCustom);
-      $(id).addEventListener("blur", markCustom);
-    });
-
-    // ---- Vendor Central Settings
-    const VC_DEFAULTS = {
-      vc_front_margin: 18,
-      vc_csa: 20
-    };
-
-    function loadVCSettings(){
-      const saved = JSON.parse(localStorage.getItem("freewill_amz_vc_settings") || "null");
-      const s = { ...VC_DEFAULTS, ...(saved || {}) };
-      $("vc_front_margin").value = s.vc_front_margin;
-      $("vc_csa").value = s.vc_csa;
-      return s;
-    }
-
-    function getVCSettings(){
-      return {
-        vc_front_margin: num($("vc_front_margin").value, VC_DEFAULTS.vc_front_margin),
-        vc_csa: num($("vc_csa").value, VC_DEFAULTS.vc_csa)
-      };
-    }
-
-    function saveVCSettings(){
-      const s = getVCSettings();
-      localStorage.setItem("freewill_amz_vc_settings", JSON.stringify(s));
-      refreshPillsAmazon();
-      toast("Vendor terms saved");
-    }
-
-    ["vc_front_margin", "vc_csa"].forEach(id => {
-      $(id).addEventListener("change", saveVCSettings);
-      $(id).addEventListener("blur", saveVCSettings);
-    });
-
-
-    // ---- Profit Margin settings (simple tool)
-    const PM_DEFAULTS = {
-      pm_ads_pct: 25,
-      pm_other_pct: 10,
-      pm_risk_high: 7,
-      pm_risk_med: 12,
-      pm_risk_ok: 20,
-      pm_rounding: 0.01
-    };
-
-    function loadProfitSettings(){
-      const saved = JSON.parse(localStorage.getItem("freewill_profit_settings") || "null");
-      const s = { ...PM_DEFAULTS, ...(saved || {}) };
-
-      $("pm_ads_pct").value = s.pm_ads_pct;
-      $("pm_other_pct").value = s.pm_other_pct;
-      $("pm_risk_high").value = s.pm_risk_high;
-      $("pm_risk_med").value = s.pm_risk_med;
-      $("pm_risk_ok").value = s.pm_risk_ok;
-      $("pm_rounding").value = s.pm_rounding;
-
-      return s;
-    }
-
-    function getProfitSettings(){
-      return {
-        pm_ads_pct: num($("pm_ads_pct").value, PM_DEFAULTS.pm_ads_pct),
-        pm_other_pct: num($("pm_other_pct").value, PM_DEFAULTS.pm_other_pct),
-        pm_risk_high: num($("pm_risk_high").value, PM_DEFAULTS.pm_risk_high),
-        pm_risk_med: num($("pm_risk_med").value, PM_DEFAULTS.pm_risk_med),
-        pm_risk_ok: num($("pm_risk_ok").value, PM_DEFAULTS.pm_risk_ok),
-        pm_rounding: num($("pm_rounding").value, PM_DEFAULTS.pm_rounding),
-      };
-    }
-
-    function saveProfitSettings(msg="Saved"){
-      const s = getProfitSettings();
-      localStorage.setItem("freewill_profit_settings", JSON.stringify(s));
-      // Refresh pills if profit tab is active
-      if ($("tab-profit").classList.contains("active")) refreshPillsProfit();
-      toast(msg);
-    }
-
-    ["pm_ads_pct","pm_other_pct","pm_risk_high","pm_risk_med","pm_risk_ok","pm_rounding"].forEach(id=>{
-      $(id).addEventListener("change", ()=>saveProfitSettings("Saved"));
-      $(id).addEventListener("blur", ()=>saveProfitSettings("Saved"));
-    });
-
-    // ---- Pills refresh
-    function refreshPillsAmazon(){
-      const mode = localStorage.getItem("freewill_amz_mode") || "quick";
-      if (mode === "quick"){
-        const s = getQuickSettings();
-        setHeaderPills(`
-          <div class="pill">Mode <strong style="color:var(--text)">Quick</strong></div>
-          <div class="pill">VAT <span>${s.q_vat_rate}</span>%</div>
-          <div class="pill">Delivery <strong style="color:var(--text)">&nbsp;AED</strong>&nbsp;<span>${s.q_delivery_fee}</span></div>
-        `);
-      } else if (mode === "adv") {
-        const s = getAdvSettings();
-        const presetLabel = (s.a_preset === "FLEX") ? "Seller Flex" : (s.a_preset === "FBA" ? "FBA" : "Custom");
-        setHeaderPills(`
-          <div class="pill">Mode <strong style="color:var(--text)">Advanced</strong></div>
-          <div class="pill">Preset <strong style="color:var(--text)">${presetLabel}</strong></div>
-          <div class="pill">VAT <span>${s.a_vat_rate}</span>%</div>
-          <div class="pill">Referral <span>${s.a_referral_pct}</span>%</div>
-          <div class="pill">P&amp;P <strong style="color:var(--text)">&nbsp;AED</strong>&nbsp;<span>${fmt(s.a_pickpack).replace(/\.00$/,"")}</span></div>
-        `);
-      } else {
-        // Vendor Central Pills
-        const s = getVCSettings();
-        setHeaderPills(`
-          <div class="pill">Mode <strong style="color:var(--text)">Vendor Central</strong></div>
-          <div class="pill">CSA <strong style="color:var(--text)">${s.vc_csa}%</strong></div>
-          <div class="pill">Front <strong style="color:var(--text)">${s.vc_front_margin}%</strong></div>
-        `);
-      }
-    }
-
-    function refreshPillsNoon(){
-      setHeaderPills(`
-        <div class="pill">Mode <strong style="color:var(--text)">Noon Deals</strong></div>
-        <div class="pill">Currency <strong style="color:var(--text)">AED</strong></div>
-      `);
-    }
-
-
-    function refreshPillsProfit(){
-      const s = getProfitSettings();
-      setHeaderPills(`
-        <div class="pill">Mode <strong style="color:var(--text)">Profit Margin</strong></div>
-        <div class="pill">Ads <span>${fmt(s.pm_ads_pct)}%</span> of profit</div>
-        <div class="pill">Other <span>${fmt(s.pm_other_pct)}%</span> of profit</div>
-        <div class="pill">Currency <strong style="color:var(--text)">AED</strong></div>
-      `);
-    }
-
-
-    // ---- Calculations: Amazon Quick
-    function calculateAmazonQuick() {
-      const cp = num($("amz_cp").value, NaN);
-      const sp = num($("amz_sp").value, NaN);
-      if (!Number.isFinite(cp) || !Number.isFinite(sp)) {
-        $("output").innerHTML = `<div class="row"><span>Input error</span><strong class="bad">Enter valid CP and SP</strong></div>`;
-        return;
-      }
-
-      const s = getQuickSettings();
-      const vat = s.q_vat_rate / 100;
-
-      const cpWithVat = cp * (1 + vat);
-      const delivery = s.q_delivery_fee;
-
-      const feeRate = (sp <= s.q_fee_threshold) ? (s.q_fee_low / 100) : (s.q_fee_high / 100);
-      const amazonFee = sp * feeRate;
-
-      const ppc = s.q_ppc_cost;
-      const payoutApprox = sp - amazonFee - delivery; // not settlement-accurate, quick only
-      const profit = sp - cpWithVat - delivery - amazonFee - ppc;
-
-      const amazonTakePct = sp > 0 ? ((amazonFee + delivery) / sp) * 100 : 0; // quick approximation
-      const margin = sp > 0 ? (profit / sp) * 100 : 0;
-      const roi = cp > 0 ? (profit / cp) * 100 : 0;
-
-      const profitClass = profit >= 0 ? "good" : "bad";
-      const adsHint =
-        margin >= 12 ? {t:"Ad room: Healthy", c:"good"} :
-        margin >= 8  ? {t:"Ad room: Tight", c:"warn"} :
-                        {t:"Ad room: Risky", c:"bad"};
-
-      $("output").innerHTML = `
-        <div class="row"><span>Mode</span><strong>Amazon • Quick</strong></div>
-        <div class="row"><span>Selling Price (SP)</span><strong>AED ${fmt(sp)}</strong></div>
-        <div class="row"><span>CP (with VAT)</span><strong>AED ${fmt(cpWithVat)}</strong></div>
-        <div class="row"><span>Delivery</span><strong>AED ${fmt(delivery)}</strong></div>
-        <div class="row"><span>Amazon fee (${(feeRate*100).toFixed(0)}%)</span><strong>AED ${fmt(amazonFee)}</strong></div>
-        <div class="row"><span>PPC / Ads</span><strong>AED ${fmt(ppc)}</strong></div>
-
-        <div class="divider"></div>
-
-        <div class="row"><span>Approx payout (SP − fee − delivery)</span><strong>AED ${fmt(payoutApprox)}</strong></div>
-
-        <div class="divider"></div>
-
-        <div class="kpis">
-          <div class="kpi">
-            <div class="klabel">Net Profit</div>
-            <div class="kval ${profitClass}">AED ${fmt(profit)}</div>
-            <div class="note" style="margin-top:6px;">Margin: ${fmt(margin)}% • ROI: ${fmt(roi)}%</div>
+        <!-- Profit Margin -->
+        <div id="pane-profit" style="display:none">
+          <div class="slabel">Margin check</div>
+          <div class="g2">
+            <div class="field"><label>Cost Price (CP)</label><div class="inp-wrap"><input type="number" inputmode="decimal" id="pm_cp" placeholder="e.g. 35"/><span class="suffix">AED</span></div></div>
+            <div class="field"><label>Selling Price (SP)</label><div class="inp-wrap"><input type="number" inputmode="decimal" id="pm_sp" placeholder="e.g. 60"/><span class="suffix">AED</span></div></div>
+            <div class="field"><label>Ads budget (% of profit)</label><input type="number" inputmode="decimal" id="pm_ads_pct" placeholder="e.g. 25"/></div>
+            <div class="field"><label>Other expenses (% of profit)</label><input type="number" inputmode="decimal" id="pm_other_pct" placeholder="e.g. 10"/></div>
           </div>
-
-          <div class="kpi">
-            <div class="klabel">${adsHint.t}</div>
-            <div class="kval ${adsHint.c}">${fmt(margin)}% margin</div>
-            <div class="note" style="margin-top:6px;">Quick mode is best for rough decisions.</div>
+          <div class="btn-row">
+            <button class="btn btn-p" onclick="calcProfit()">Calculate</button>
+            <button class="btn btn-g" onclick="clearFields(['pm_cp','pm_sp','pm_ads_pct','pm_other_pct'])">Clear</button>
           </div>
-
-          <div class="kpi">
-            <div class="klabel">Fee rule used</div>
-            <div class="kval">SP ${sp <= s.q_fee_threshold ? "≤" : ">"} AED ${fmt(s.q_fee_threshold)}</div>
-            <div class="note" style="margin-top:6px;">Fee: ${sp <= s.q_fee_threshold ? s.q_fee_low : s.q_fee_high}%</div>
-          </div>
-
-          <div class="kpi">
-            <div class="klabel">Amazon take (approx)</div>
-            <div class="kval">${fmt(amazonTakePct)}%</div>
-            <div class="note" style="margin-top:6px;">This excludes Pick&amp;Pack/Closing. Use Advanced for accurate fee %.</div>
-          </div>
-        </div>
-
-        <div class="note">
-          Assumptions: VAT ${s.q_vat_rate}%, Delivery AED ${s.q_delivery_fee}, Fee rule: ${s.q_fee_low}% if SP ≤ AED ${s.q_fee_threshold}, else ${s.q_fee_high}%.
-        </div>
-      `;
-    }
-
-    // ---- Calculations: Amazon Advanced
-    function calculateAmazonAdv(){
-      const sp = num($("a_sp").value, NaN);
-      const cpW = num($("a_cp_wholesale").value, NaN);
-      const cpL_in = num($("a_cp_loaded").value, NaN);
-      const ppc = num($("a_ppc_cost").value, 0);
-
-      if (!Number.isFinite(sp) || !Number.isFinite(cpW)){
-        $("output").innerHTML = `<div class="row"><span>Input error</span><strong class="bad">Enter SP and Wholesale CP</strong></div>`;
-        return;
-      }
-
-      const s = getAdvSettings();
-      const vat = s.a_vat_rate / 100;
-
-      const cpL = Number.isFinite(cpL_in) ? cpL_in : cpW;
-
-      const referralBase = sp * (s.a_referral_pct / 100);
-      const pickBase = s.a_pickpack;
-      const closeBase = s.a_closing_fee;
-
-      const referralVat = referralBase * vat;
-      const pickVat = pickBase * vat;
-      const closeVat = closeBase * vat;
-
-      const referralTotal = referralBase + referralVat;
-      const pickTotal = pickBase + pickVat;
-      const closeTotal = closeBase + closeVat;
-
-      const totalFees = referralTotal + pickTotal + closeTotal;
-      const payout = sp - totalFees;
-
-      const profitW = payout - cpW - ppc;
-      const profitL = payout - cpL - ppc;
-
-      const amazonTakePct = sp > 0 ? (totalFees / sp) * 100 : 0;
-      const marginW = sp > 0 ? (profitW / sp) * 100 : 0;
-      const marginL = sp > 0 ? (profitL / sp) * 100 : 0;
-
-      const roiW = cpW > 0 ? (profitW / cpW) * 100 : 0;
-      const roiL = cpL > 0 ? (profitL / cpL) * 100 : 0;
-
-      const clsW = profitW >= 0 ? "good" : "bad";
-      const clsL = profitL >= 0 ? "good" : "bad";
-
-      const adsHint =
-        marginL >= 12 ? {t:"Ad room: Healthy", c:"good"} :
-        marginL >= 8  ? {t:"Ad room: Tight", c:"warn"} :
-                        {t:"Ad room: Risky", c:"bad"};
-
-      const presetLabel = (s.a_preset === "FLEX") ? "Seller Flex" : (s.a_preset === "FBA" ? "FBA" : "Custom");
-
-      $("output").innerHTML = `
-        <div class="row"><span>Mode</span><strong>Amazon • Advanced (${presetLabel})</strong></div>
-        <div class="row"><span>Selling Price (SP)</span><strong>AED ${fmt(sp)}</strong></div>
-
-        <div class="row"><span>Referral fee (${fmt(s.a_referral_pct)}%)</span><strong>AED ${fmt(referralTotal)}</strong></div>
-        <div class="subrow"><span>Base AED ${fmt(referralBase)} + VAT AED ${fmt(referralVat)}</span><span></span></div>
-
-        <div class="row"><span>Pick &amp; Pack</span><strong>AED ${fmt(pickTotal)}</strong></div>
-        <div class="subrow"><span>Base AED ${fmt(pickBase)} + VAT AED ${fmt(pickVat)}</span><span></span></div>
-
-        <div class="row"><span>Variable closing</span><strong>AED ${fmt(closeTotal)}</strong></div>
-        <div class="subrow"><span>Base AED ${fmt(closeBase)} + VAT AED ${fmt(closeVat)}</span><span></span></div>
-
-        <div class="divider"></div>
-
-        <div class="row"><span>Total Amazon fees</span><strong>AED ${fmt(totalFees)}</strong></div>
-        <div class="row"><span>Amazon payout (to you)</span><strong>AED ${fmt(payout)}</strong></div>
-
-        <div class="divider"></div>
-
-        <div class="row"><span>Wholesale CP</span><strong>AED ${fmt(cpW)}</strong></div>
-        <div class="row"><span>Loaded CP</span><strong>AED ${fmt(cpL)}</strong></div>
-        <div class="row"><span>PPC / Ads</span><strong>AED ${fmt(ppc)}</strong></div>
-
-        <div class="divider"></div>
-
-        <div class="kpis">
-          <div class="kpi">
-            <div class="klabel">Profit (Wholesale)</div>
-            <div class="kval ${clsW}">AED ${fmt(profitW)}</div>
-            <div class="note" style="margin-top:6px;">Margin: ${fmt(marginW)}% • ROI: ${fmt(roiW)}%</div>
-          </div>
-
-          <div class="kpi">
-            <div class="klabel">Profit (Loaded)</div>
-            <div class="kval ${clsL}">AED ${fmt(profitL)}</div>
-            <div class="note" style="margin-top:6px;">Margin: ${fmt(marginL)}% • ROI: ${fmt(roiL)}%</div>
-          </div>
-
-          <div class="kpi">
-            <div class="klabel">Amazon takes</div>
-            <div class="kval">AED ${fmt(totalFees)} <span style="color:rgba(168,179,207,0.75); font-size:13px;">(${fmt(amazonTakePct)}%)</span></div>
-            <div class="note" style="margin-top:6px;">Referral + P&amp;P + closing (incl. VAT on fees).</div>
-          </div>
-
-          <div class="kpi">
-            <div class="klabel">${adsHint.t}</div>
-            <div class="kval ${adsHint.c}">${fmt(marginL)}% margin (Loaded)</div>
-            <div class="note" style="margin-top:6px;">Add your avg PPC to see true net.</div>
-          </div>
-        </div>
-
-        <div class="note">
-          Pro tip: Advanced mode should match your settlement payout: <b>Payout = SP − Total Amazon fees</b>.
-        </div>
-      `;
-    }
-
-    // ---- Calculations: Amazon Vendor Central
-    function calculateAmazonVC(){
-      const rrp = num($("vc_rrp").value, NaN);
-      const invoice = num($("vc_invoice").value, NaN);
-      const cost = num($("vc_cost").value, NaN);
-
-      if (!Number.isFinite(rrp) || !Number.isFinite(invoice) || !Number.isFinite(cost)){
-        $("output").innerHTML = `<div class="row"><span>Input error</span><strong class="bad">Enter RRP, Invoice, and Cost</strong></div>`;
-        return;
-      }
-
-      const s = getVCSettings();
-      
-      const frontMarginVal = rrp * (s.vc_front_margin / 100);
-      const amzBuyCost = rrp - frontMarginVal; // Target
-
-      const csaVal = invoice * (s.vc_csa / 100);
-      const netInHand = invoice - csaVal;
-
-      const realProfit = netInHand - cost;
-      
-      const profitPctRRP = rrp > 0 ? (realProfit / rrp) * 100 : 0;
-      const profitPctInvoice = invoice > 0 ? (realProfit / invoice) * 100 : 0;
-
-      // Health Label Logic
-      let health = { t: "Unset", c: "muted" };
-      if (profitPctRRP < 5) health = { t: "Loss", c: "bad" };
-      else if (profitPctRRP < 10) health = { t: "High Risk", c: "bad" };
-      else if (profitPctRRP <= 20) health = { t: "Acceptable", c: "warn" }; // using warn color for amber
-      else health = { t: "Strong", c: "good" };
-
-      const profitClass = realProfit >= 0 ? "good" : "bad";
-
-      $("output").innerHTML = `
-        <div class="row"><span>Mode</span><strong>Amazon • Vendor Central</strong></div>
-        <div class="row"><span>Amazon RRP</span><strong>AED ${fmt(rrp)}</strong></div>
-        <div class="row"><span>Your Invoice Price</span><strong>AED ${fmt(invoice)}</strong></div>
-        <div class="row"><span>Product Cost</span><strong>AED ${fmt(cost)}</strong></div>
-
-        <div class="divider"></div>
-
-        <div class="row"><span>Front Margin (${s.vc_front_margin}%)</span><strong>AED ${fmt(frontMarginVal)}</strong></div>
-        <div class="row"><span>Amz Buy Cost (Target)</span><strong>AED ${fmt(amzBuyCost)}</strong></div>
-        <div class="subrow"><span>RRP − Front Margin. Compare with your Invoice Price.</span><span></span></div>
-
-        <div class="divider"></div>
-
-        <div class="row"><span>Back End CSA (${s.vc_csa}%)</span><strong>AED ${fmt(csaVal)}</strong></div>
-        <div class="row"><span>Net In Hand</span><strong>AED ${fmt(netInHand)}</strong></div>
-        <div class="subrow"><span>Invoice Price − CSA (Co-op fees)</span><span></span></div>
-
-        <div class="divider"></div>
-
-        <div class="kpis">
-          <div class="kpi">
-            <div class="klabel">Real Profit (Cash)</div>
-            <div class="kval ${profitClass}">AED ${fmt(realProfit)}</div>
-            <div class="note" style="margin-top:6px;">Net In Hand − Product Cost</div>
-          </div>
-
-          <div class="kpi">
-            <div class="klabel">Profit Health</div>
-            <div class="kval ${health.c}">${health.t}</div>
-            <div class="note" style="margin-top:6px;">${fmt(profitPctRRP)}% of RRP</div>
-          </div>
-
-          <div class="kpi">
-            <div class="klabel">Profit vs RRP</div>
-            <div class="kval">${fmt(profitPctRRP)}%</div>
-            <div class="note" style="margin-top:6px;">Out of what the customer paid, you kept this.</div>
-          </div>
-
-          <div class="kpi">
-            <div class="klabel">Profit vs Invoice</div>
-            <div class="kval">${fmt(profitPctInvoice)}%</div>
-            <div class="note" style="margin-top:6px;">Your internal wholesale margin.</div>
-          </div>
-        </div>
-      `;
-    }
-
-
-    // ---- Profit Margin calculation (raw margin)
-    function calculateProfitMargin(){
-      const cp = num($("pm_cp").value, NaN);
-      const sp = num($("pm_sp").value, NaN);
-
-      if (!Number.isFinite(cp) || !Number.isFinite(sp)){
-        $("output").innerHTML = `<div class="row"><span>Input error</span><strong class="bad">Enter valid CP and SP</strong></div>`;
-        return;
-      }
-
-      const s = getProfitSettings();
-      const profit = sp - cp;
-
-      const profitPct = sp > 0 ? (profit / sp) * 100 : 0;      // margin on selling price
-      const markupPct = cp > 0 ? (profit / cp) * 100 : 0;      // markup on cost
-
-      // allocations from profit (what user asked)
-      const adsAED = profit * (s.pm_ads_pct / 100);
-      const otherAED = profit * (s.pm_other_pct / 100);
-      const totalAlloc = adsAED + otherAED;
-      const remaining = profit - totalAlloc;
-
-      const overAlloc = (s.pm_ads_pct + s.pm_other_pct) > 100;
-
-      // Risk label by margin %
-      let risk = {label:"OK", cls:"good", note:"Room to breathe (assuming no platform fees)."};
-      if (profit <= 0){
-        risk = {label:"Loss", cls:"bad", note:"You’re paying to work. Unless there’s a strategic reason, don’t."};
-      } else if (profitPct <= s.pm_risk_high){
-        risk = {label:"High risk", cls:"bad", note:"Tiny margin. One return / promo / price drop can wipe you out."};
-      } else if (profitPct <= s.pm_risk_med){
-        risk = {label:"Medium risk", cls:"warn", note:"Playable, but ads and fee surprises can kill it."};
-      } else if (profitPct <= s.pm_risk_ok){
-        risk = {label:"OK", cls:"good", note:"Healthy margin for day-to-day selling."};
-      } else {
-        risk = {label:"Strong", cls:"good", note:"Comfortable margin. You can scale or run promos safely."};
-      }
-
-      const clsProfit = profit >= 0 ? "good" : "bad";
-      const clsRemain = remaining >= 0 ? "good" : "bad";
-
-      // Rounding helper (optional)
-      const roundTo = (x) => {
-        const r = Number(s.pm_rounding);
-        if (!Number.isFinite(r) || r <= 0) return x;
-        return Math.round(x / r) * r;
-      };
-
-      const rProfit = roundTo(profit);
-      const rAds = roundTo(adsAED);
-      const rOther = roundTo(otherAED);
-      const rRemain = roundTo(remaining);
-
-      $("output").innerHTML = `
-        <div class="row"><span>Mode</span><strong>Profit Margin</strong></div>
-        <div class="row"><span>Cost Price (CP)</span><strong>AED ${fmt(cp)}</strong></div>
-        <div class="row"><span>Selling Price (SP)</span><strong>AED ${fmt(sp)}</strong></div>
-
-        <div class="divider"></div>
-
-        <div class="row"><span>Profit (SP − CP)</span><strong class="${clsProfit}">AED ${fmt(rProfit)}</strong></div>
-        <div class="row"><span>Profit % (of SP)</span><strong>${fmt(profitPct)}%</strong></div>
-        <div class="row"><span>Markup % (vs CP)</span><strong>${fmt(markupPct)}%</strong></div>
-
-        <div class="divider"></div>
-
-        <div class="row"><span>Spare for Ads (${fmt(s.pm_ads_pct)}% of profit)</span><strong>AED ${fmt(rAds)}</strong></div>
-        <div class="row"><span>Other expenses (${fmt(s.pm_other_pct)}% of profit)</span><strong>AED ${fmt(rOther)}</strong></div>
-        <div class="row"><span>Remaining profit</span><strong class="${clsRemain}">AED ${fmt(rRemain)}</strong></div>
-
-        <div class="divider"></div>
-
-        <div class="kpis">
-          <div class="kpi">
-            <div class="klabel">Risk check</div>
-            <div class="kval ${risk.cls}">${risk.label}</div>
-            <div class="note" style="margin-top:6px;">${risk.note}</div>
-          </div>
-
-          <div class="kpi">
-            <div class="klabel">Reality check</div>
-            <div class="kval">${fmt(profitPct)}% margin</div>
-            <div class="note" style="margin-top:6px;">
-              This ignores platform fees. If you’re selling on Amazon/Noon, run the marketplace calculators too.
+          <details>
+            <summary>Risk threshold settings</summary>
+            <div class="det-body">
+              <div class="g2">
+                <div class="field"><label>High risk below %</label><input type="number" inputmode="decimal" id="pm_risk_high" placeholder="7"/></div>
+                <div class="field"><label>Medium risk below %</label><input type="number" inputmode="decimal" id="pm_risk_med" placeholder="12"/></div>
+                <div class="field"><label>OK margin below %</label><input type="number" inputmode="decimal" id="pm_risk_ok" placeholder="20"/></div>
+              </div>
+              <p class="note" style="margin-top:8px">Raw margin check only — ignores platform fees. Use Amazon tab for the full picture.</p>
             </div>
-          </div>
+          </details>
         </div>
 
-        ${overAlloc ? `<div class="note bad"><b>Warning:</b> Ads% + Other% is over 100% of profit. Reduce the percentages.</div>` : ``}
-      `;
-    }
-
-    // ---- Noon calculation
-    function calculateNoon() {
-      const price = num($("noon_price").value, NaN);
-      const discount = num($("noon_discount").value, NaN);
-
-      if (!Number.isFinite(price) || !Number.isFinite(discount)) {
-        $("output").innerHTML = `<div class="row"><span>Input error</span><strong class="bad">Enter valid price and discount</strong></div>`;
-        return;
-      }
-
-      const dealPrice = price - (price * discount / 100);
-
-      $("output").innerHTML = `
-        <div class="row"><span>Mode</span><strong>Noon Deals</strong></div>
-        <div class="row"><span>Original Price</span><strong>AED ${fmt(price)}</strong></div>
-        <div class="row"><span>Discount</span><strong>${discount.toFixed(2)}%</strong></div>
-
-        <div class="divider"></div>
-
-        <div class="kpis">
-          <div class="kpi">
-            <div class="klabel">Deal Price</div>
-            <div class="kval good">AED ${fmt(dealPrice)}</div>
-            <div class="note" style="margin-top:6px;">Deal price after discount.</div>
-          </div>
-          <div class="kpi">
-            <div class="klabel">Next upgrade</div>
-            <div class="kval">Net Profit mode</div>
-            <div class="note" style="margin-top:6px;">Add Noon commission + fulfilment costs.</div>
-          </div>
-        </div>
-      `;
-    }
-
-    // ---- Buttons
-    $("btnAmzQuick").addEventListener("click", calculateAmazonQuick);
-    $("btnAmzAdv").addEventListener("click", calculateAmazonAdv);
-    $("btnAmzVC").addEventListener("click", calculateAmazonVC);
-    $("btnNoon").addEventListener("click", calculateNoon);
-    $("btnProfit").addEventListener("click", calculateProfitMargin);
-
-    $("btnAmzQuickClear").addEventListener("click", () => {
-      $("amz_cp").value = "";
-      $("amz_sp").value = "";
-      $("output").innerHTML = `<div class="row"><span>Cleared</span><strong>Amazon Quick</strong></div>`;
-      $("amz_cp").focus();
-    });
-
-    $("btnAmzAdvClear").addEventListener("click", () => {
-      $("a_sp").value = "";
-      $("a_cp_wholesale").value = "";
-      $("a_cp_loaded").value = "";
-      $("a_ppc_cost").value = "";
-      $("output").innerHTML = `<div class="row"><span>Cleared</span><strong>Amazon Advanced</strong></div>`;
-      $("a_sp").focus();
-    });
-
-    $("btnAmzVCClear").addEventListener("click", () => {
-      $("vc_rrp").value = "";
-      $("vc_invoice").value = "";
-      $("vc_cost").value = "";
-      $("output").innerHTML = `<div class="row"><span>Cleared</span><strong>Vendor Central</strong></div>`;
-      $("vc_rrp").focus();
-    });
-
-    $("btnProfitClear").addEventListener("click", () => {
-      $("pm_cp").value = "";
-      $("pm_sp").value = "";
-      $("output").innerHTML = `<div class="row"><span>Cleared</span><strong>Profit Margin</strong></div>`;
-      $("pm_cp").focus();
-    });
-
-    $("btnNoonClear").addEventListener("click", () => {
-      $("noon_price").value = "";
-      $("noon_discount").value = "";
-      $("output").innerHTML = `<div class="row"><span>Cleared</span><strong>Noon Deals</strong></div>`;
-      $("noon_price").focus();
-    });
-
-    // ---- Keyboard: Enter to calculate on active pane/mode
-    document.addEventListener("keydown", (e)=>{
-      if (e.key !== "Enter") return;
-
-      if ($("tab-noon").classList.contains("active")){ calculateNoon(); return; }
-      if ($("tab-profit").classList.contains("active")){ calculateProfitMargin(); return; }
-
-      const mode = localStorage.getItem("freewill_amz_mode") || "quick";
-      if (mode === "quick") calculateAmazonQuick();
-      else if (mode === "vc") calculateAmazonVC();
-      else calculateAmazonAdv();
-    });
-    // ---- Floating Calculator
-    let calcOverlay, calcFab, calcClose, calcDisplay;
-    function calcIsOpen(){ return calcOverlay.classList.contains("show"); }
-
-    function calcOpen(){
-      calcOverlay.classList.add("show");
-      calcOverlay.setAttribute("aria-hidden", "false");
-      setTimeout(() => calcDisplay.focus(), 0);
-    }
-
-    function calcCloseFn(){
-      calcOverlay.classList.remove("show");
-      calcOverlay.setAttribute("aria-hidden", "true");
-      calcFab.focus();
-    }
-
-    function calcAppend(val){
-      calcDisplay.value = (calcDisplay.value || "") + val;
-    }
-
-    function calcBack(){
-      calcDisplay.value = (calcDisplay.value || "").slice(0, -1);
-    }
-
-    function calcClear(){
-      calcDisplay.value = "";
-    }
-
-    function calcSanitize(expr){
-      return (expr || "").replace(/[^0-9+\-*/().\s]/g, "");
-    }
-
-    function calcEval(){
-      const raw = calcDisplay.value || "";
-      const expr = calcSanitize(raw);
-      if (!expr.trim()) return;
-      try{
-        // eslint-disable-next-line no-new-func
-        const result = Function('"use strict";return (' + expr + ')')();
-        if (Number.isFinite(result)){
-          const pretty = Math.round((result + Number.EPSILON) * 1e10) / 1e10;
-          calcDisplay.value = String(pretty);
-        } else {
-          showToast("Calculator: invalid result");
-        }
-      }catch(e){
-        showToast("Calculator: invalid expression");
-      }
-    }
-
-    function wireCalculator(){
-      calcOverlay = document.getElementById("calcOverlay");
-      calcFab = document.getElementById("calcFab");
-      calcClose = document.getElementById("calcClose");
-      calcDisplay = document.getElementById("calcDisplay");
-      if (!calcOverlay || !calcFab || !calcClose || !calcDisplay) return;
-
-      calcFab.addEventListener("click", calcOpen);
-      calcFab.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" || e.key === " "){
-          e.preventDefault();
-          calcOpen();
-        }
-      });
-
-      calcClose.addEventListener("click", calcCloseFn);
-
-      calcOverlay.addEventListener("click", (e) => {
-        if (e.target === calcOverlay) calcCloseFn();
-      });
-
-      calcOverlay.querySelectorAll(".calc-key").forEach(btn => {
-        btn.addEventListener("click", () => {
-          const val = btn.getAttribute("data-val");
-          const action = btn.getAttribute("data-action");
-          if (action === "clear") return calcClear();
-          if (action === "back") return calcBack();
-          if (action === "equals") return calcEval();
-          if (val) return calcAppend(val);
-        });
-      });
-
-      document.addEventListener("keydown", (e) => {
-        if (e.altKey && (e.key === "c" || e.key === "C")){
-          e.preventDefault();
-          if (calcIsOpen()) calcCloseFn();
-          else calcOpen();
-          return;
-        }
-
-        if (!calcIsOpen()) return;
-
-        if (e.key === "Escape"){
-          e.preventDefault();
-          calcClear();
-          return;
-        }
-
-        if (e.key === "Enter"){
-          e.preventDefault();
-          calcEval();
-          return;
-        }
-
-        if (e.key === "Backspace"){
-          e.preventDefault();
-          calcBack();
-          return;
-        }
-
-        if (e.key === "Delete"){
-          e.preventDefault();
-          calcClear();
-          return;
-        }
-
-        const allowed = "0123456789+-*/().";
-        if (allowed.includes(e.key)){
-          e.preventDefault();
-          calcAppend(e.key);
-          return;
-        }
-      });
-
-      calcDisplay.addEventListener("input", () => {
-        const sanitized = calcSanitize(calcDisplay.value);
-        if (sanitized !== calcDisplay.value) calcDisplay.value = sanitized;
-      });
-    }
-
-
-    // ---- Init
-    loadQuickSettings();
-    loadAdvSettings();
-    loadProfitSettings();
-    loadVCSettings();
-
-    
-    window.addEventListener('DOMContentLoaded', wireCalculator);
-// Restore last Amazon mode
-    const lastMode = localStorage.getItem("freewill_amz_mode") || "quick";
-    setAmazonMode(lastMode);
-
-    setActiveTab("amz");
-  </script>
-
-  <div id="calcFab" class="calc-fab" role="button" tabindex="0" aria-label="Open calculator" title="Calculator (Alt+C)">
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M7 2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="2"/>
-      <path d="M7 7h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-      <path d="M8.5 10.5h2M13.5 10.5h2M8.5 13.5h2M13.5 13.5h2M8.5 16.5h2M13.5 16.5h2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-    </svg>
-  </div>
-
-  <div id="calcOverlay" class="calc-overlay" aria-hidden="true">
-    <div class="calc-panel" role="dialog" aria-modal="true" aria-label="Calculator">
-      <div class="calc-head">
-        <div class="calc-title">
-          <span>Calculator</span>
-          
-        </div>
-        <button id="calcClose" class="calc-x" aria-label="Close calculator">×</button>
-      </div>
-      <div class="calc-body">
-        <input id="calcDisplay" class="calc-display" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="Calculator display" />
-        <div class="calc-sub">
-          <span id="calcHint">Type or click keys</span>
-          <span id="calcMini">ALT + C to close</span>
-        </div>
-
-        <div class="calc-grid" aria-label="Calculator keys">
-          <button class="calc-key danger" data-action="clear">AC</button>
-          <button class="calc-key danger" data-action="back">⌫</button>
-          <button class="calc-key op" data-val="(">(</button>
-          <button class="calc-key op" data-val=")">)</button>
-
-          <button class="calc-key" data-val="7">7</button>
-          <button class="calc-key" data-val="8">8</button>
-          <button class="calc-key" data-val="9">9</button>
-          <button class="calc-key op" data-val="/">÷</button>
-
-          <button class="calc-key" data-val="4">4</button>
-          <button class="calc-key" data-val="5">5</button>
-          <button class="calc-key" data-val="6">6</button>
-          <button class="calc-key op" data-val="*">×</button>
-
-          <button class="calc-key" data-val="1">1</button>
-          <button class="calc-key" data-val="2">2</button>
-          <button class="calc-key" data-val="3">3</button>
-          <button class="calc-key op" data-val="-">−</button>
-
-          <button class="calc-key wide" data-val="0">0</button>
-          <button class="calc-key" data-val=".">.</button>
-          <button class="calc-key op" data-val="+">+</button>
-
-          <button class="calc-key equal" style="grid-column: span 4; height: 46px;" data-action="equals">=</button>
-        </div>
       </div>
     </div>
+
+    <!-- Result card -->
+    <div class="result-card">
+      <div class="result-head">
+        <div class="result-head-left">
+          <div class="result-dot"></div>
+          <h2>Breakdown</h2>
+        </div>
+        <div class="result-mode" id="result-mode">—</div>
+      </div>
+      <div class="result-body" id="output">
+        <div class="empty">
+          <div class="empty-icon">📊</div>
+          <p>Enter your numbers on the left and hit <strong>Calculate</strong> to see the full breakdown.</p>
+        </div>
+      </div>
+      <div class="result-footer">
+        <span>FREEWILL UAE · v4.1</span>
+        <span>AED · UAE VAT</span>
+      </div>
+    </div>
+
   </div>
+</div>
 
+<!-- Toast -->
+<div class="toast" id="toast"></div>
 
+<!-- Floating Calculator -->
+<button class="calc-fab" id="calcFab" title="Quick Calculator (Alt+C)">⊞</button>
+<div class="calc-overlay" id="calcOverlay" onclick="if(event.target===this)closeCalc()">
+  <div class="calc-panel">
+    <input class="calc-display" id="calcDisplay" placeholder="0" autocomplete="off"/>
+    <div class="calc-keys">
+      <button class="calc-key clr" data-action="clear">AC</button>
+      <button class="calc-key op" data-action="back">⌫</button>
+      <button class="calc-key op" data-val="%">%</button>
+      <button class="calc-key op" data-val="/">÷</button>
+      <button class="calc-key" data-val="7">7</button>
+      <button class="calc-key" data-val="8">8</button>
+      <button class="calc-key" data-val="9">9</button>
+      <button class="calc-key op" data-val="*">×</button>
+      <button class="calc-key" data-val="4">4</button>
+      <button class="calc-key" data-val="5">5</button>
+      <button class="calc-key" data-val="6">6</button>
+      <button class="calc-key op" data-val="-">−</button>
+      <button class="calc-key" data-val="1">1</button>
+      <button class="calc-key" data-val="2">2</button>
+      <button class="calc-key" data-val="3">3</button>
+      <button class="calc-key op" data-val="+">+</button>
+      <button class="calc-key" data-val="0" style="grid-column:span 2">0</button>
+      <button class="calc-key" data-val=".">.</button>
+      <button class="calc-key eq" data-action="equals">=</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const num = (v, def=0) => { const n = parseFloat(v); return isFinite(n) ? n : def; };
+const fmt = n => 'AED ' + Number(n).toLocaleString('en-AE',{minimumFractionDigits:2,maximumFractionDigits:2});
+const pct = n => Number(n).toFixed(1) + '%';
+
+let toastT;
+function toast(msg) {
+  const el = $('toast'); el.textContent = msg;
+  el.classList.add('show'); clearTimeout(toastT);
+  toastT = setTimeout(() => el.classList.remove('show'), 1800);
+}
+function setMode(txt) { $('result-mode').textContent = txt; }
+
+// ── Row builders ──
+function row(label, val, cls='', delay=0) {
+  return `<div class="rrow" style="animation-delay:${delay}ms"><span class="rlabel">${label}</span><span class="rval ${cls}">${val}</span></div>`;
+}
+function rdiv() { return `<div class="rdiv"></div>`; }
+function kpi(label, val, cls='', delay=0) {
+  return `<div class="kpi" style="animation-delay:${delay}ms"><div class="kpi-label">${label}</div><div class="kpi-val ${cls}">${val}</div></div>`;
+}
+function heroProfit(val, cls) {
+  return `<div class="profit-hero"><div class="ph-label">Net Profit per Unit</div><div class="ph-val ${cls}">${val}</div></div>`;
+}
+function feeBar(segments) {
+  const total = segments.reduce((a,s) => a+s.pct, 0);
+  const bars = segments.map(s => `<div class="fee-seg" style="width:${Math.min(s.pct,100)}%;background:${s.color}"></div>`).join('');
+  const legend = segments.map(s => `<div class="fee-leg-item"><div class="fee-leg-dot" style="background:${s.color}"></div>${s.label}<span class="fee-leg-pct">${s.pct.toFixed(1)}%</span></div>`).join('');
+  return `<div class="fee-section">
+    <div class="fee-title">Cost breakdown (% of selling price)</div>
+    <div class="fee-track">${bars}</div>
+    <div class="fee-legend">${legend}</div>
+  </div>`;
+}
+function statusBadge(label, cls) {
+  return `<div><span class="status ${cls}">${label}</span></div>`;
+}
+
+// ── Tab management ──
+function setTab(tab) {
+  ['amz','noon','profit'].forEach(t => {
+    $('tab-'+t).classList.toggle('active', t===tab);
+    $('pane-'+t).style.display = t===tab ? '' : 'none';
+  });
+  resetOutput();
+}
+function setAmzMode(mode) {
+  ['quick','adv','vc'].forEach(m => {
+    $('sub-'+m).classList.toggle('active', m===mode);
+    $('amz-'+m).style.display = m===mode ? '' : 'none';
+  });
+  localStorage.setItem('fw_amz_mode', mode);
+  resetOutput();
+}
+function resetOutput() {
+  $('output').innerHTML = `<div class="empty"><div class="empty-icon">📊</div><p>Enter your numbers and hit <strong>Calculate</strong>.</p></div>`;
+  setMode('—');
+}
+function clearFields(ids) { ids.forEach(id => { if($(id)) $(id).value=''; }); resetOutput(); if($(ids[0])) $(ids[0]).focus(); }
+
+// ── Settings ──
+const Q_DEF = {q_vat_rate:5,q_delivery_fee:11,q_fee_threshold:50,q_fee_low:8,q_fee_high:15,q_ppc_cost:0};
+const A_DEF = {a_preset:'FBA',a_vat_rate:5,a_referral_pct:15,a_pickpack:11.25,a_closing_fee:0.60};
+const VC_DEF = {vc_csa:20};
+const PM_DEF = {pm_risk_high:7,pm_risk_med:12,pm_risk_ok:20};
+
+function loadSettings(def, key) {
+  const s = {...def, ...JSON.parse(localStorage.getItem(key)||'{}')};
+  Object.keys(def).forEach(k => { if($(k)) $(k).value = s[k]; });
+  return s;
+}
+function getSettings(def) {
+  const s = {};
+  Object.keys(def).forEach(k => { s[k] = k==='a_preset' ? ($(k)?$(k).value:def[k]) : num($(k)?$(k).value:'', def[k]); });
+  return s;
+}
+function saveQ() { localStorage.setItem('fw_q', JSON.stringify(getSettings(Q_DEF))); toast('Settings saved'); }
+function saveA(msg='Saved') { localStorage.setItem('fw_a', JSON.stringify(getSettings(A_DEF))); toast(msg); }
+function applyPreset(p) {
+  const presets = {FBA:{a_pickpack:11.25,a_closing_fee:0.60},FLEX:{a_pickpack:11.25,a_closing_fee:0.60}};
+  if(presets[p]) { $('a_pickpack').value=presets[p].a_pickpack; $('a_closing_fee').value=presets[p].a_closing_fee; }
+  saveA('Preset applied');
+}
+
+// ── Amazon Quick ──
+function calcAmzQuick() {
+  const cp = num($('amz_cp').value, NaN), sp = num($('amz_sp').value, NaN);
+  if (!isFinite(cp)||!isFinite(sp)) { $('output').innerHTML=row('Error','Enter valid CP and SP','bad'); return; }
+  const s = getSettings(Q_DEF);
+  const feePct = sp <= s.q_fee_threshold ? s.q_fee_low : s.q_fee_high;
+  const fee = sp * feePct / 100;
+  const vat = fee * s.q_vat_rate / 100;
+  const totalFees = fee + vat + s.q_delivery_fee + s.q_ppc_cost;
+  const payout = sp - totalFees;
+  const profit = payout - cp;
+  const marginPct = (profit/sp)*100;
+  const roiPct = (profit/cp)*100;
+  const amzTakePct = (totalFees/sp)*100;
+  const cpPct = (cp/sp)*100;
+  const profitPct = Math.max(0,(profit/sp)*100);
+  const clsP = profit>=0?'ph-good':'ph-bad';
+  const clsM = marginPct>=15?'good':marginPct>=7?'warn':'bad';
+  setMode('QUICK');
+  $('output').innerHTML = `
+    ${heroProfit(fmt(profit), clsP)}
+    ${feeBar([
+      {label:'Your cost', pct:cpPct, color:'#4d8fff'},
+      {label:'Platform fees', pct:amzTakePct-Math.max(0,-profitPct), color:'#ff4d6a'},
+      {label:'Profit', pct:profitPct, color:'#00e5a0'}
+    ])}
+    ${rdiv()}
+    ${row('Selling Price', fmt(sp), '', 0)}
+    ${row('Cost Price (CP)', fmt(cp), 'blue', 40)}
+    ${row('Platform fee ('+feePct+'%)', fmt(fee), 'bad', 60)}
+    ${row('VAT on fees', fmt(vat), 'bad', 80)}
+    ${row('Delivery fee', fmt(s.q_delivery_fee), 'bad', 100)}
+    ${s.q_ppc_cost>0?row('PPC / Ads', fmt(s.q_ppc_cost), 'warn', 110):''}
+    ${row('Total deductions', fmt(totalFees+cp), 'bad', 120)}
+    ${rdiv()}
+    <div class="kpi-row">
+      ${kpi('Net Profit', fmt(profit), profit>=0?'good':'bad', 140)}
+      ${kpi('Margin %', pct(marginPct), clsM, 160)}
+      ${kpi('ROI %', pct(roiPct), roiPct>=20?'good':roiPct>=10?'warn':'bad', 180)}
+    </div>
+    ${statusBadge(marginPct>=20?'Healthy margin':marginPct>=12?'OK — watch costs':marginPct>=7?'Tight — be careful':'Danger zone', marginPct>=20?'s-good':marginPct>=12?'s-warn':marginPct>=7?'s-warn':'s-bad')}`;
+}
+
+// ── Amazon Advanced ──
+function calcAmzAdv() {
+  const sp = num($('a_sp').value, NaN), cpW = num($('a_cp_wholesale').value, NaN);
+  if (!isFinite(sp)||!isFinite(cpW)) { $('output').innerHTML=row('Error','Enter SP and Wholesale CP','bad'); return; }
+  const s = getSettings(A_DEF);
+  const cpL = num($('a_cp_loaded').value, NaN);
+  const ppc = num($('a_ppc_cost').value, 0);
+  const refFee = sp * s.a_referral_pct / 100;
+  const vatMult = 1 + s.a_vat_rate/100;
+  const totalFees = (refFee + s.a_pickpack + s.a_closing_fee) * vatMult;
+  const payout = sp - totalFees;
+  const profitW = payout - cpW - ppc;
+  const marginW = (profitW/sp)*100;
+  const roiW = (profitW/cpW)*100;
+  const amzTakePct = (totalFees/sp)*100;
+  const cpPct = (cpW/sp)*100;
+  const profitPct = Math.max(0,(profitW/sp)*100);
+  const hasLoaded = isFinite(cpL);
+  const profitL = hasLoaded ? payout - cpL - ppc : null;
+  const marginL = hasLoaded ? (profitL/sp)*100 : null;
+  setMode('ADVANCED · '+s.a_preset);
+  $('output').innerHTML = `
+    ${heroProfit(fmt(profitW), profitW>=0?'ph-good':'ph-bad')}
+    ${feeBar([
+      {label:'Your cost', pct:cpPct, color:'#4d8fff'},
+      {label:'Amazon fees', pct:amzTakePct, color:'#ff4d6a'},
+      {label:'Profit', pct:profitPct, color:'#00e5a0'}
+    ])}
+    ${rdiv()}
+    ${row('Selling Price', fmt(sp), '', 0)}
+    ${row('Referral fee ('+s.a_referral_pct+'%)', fmt(refFee), 'bad', 40)}
+    ${row('Pick & Pack', fmt(s.a_pickpack), 'bad', 60)}
+    ${row('Closing fee', fmt(s.a_closing_fee), 'bad', 80)}
+    ${row('VAT on fees ('+s.a_vat_rate+'%)', fmt(totalFees-(refFee+s.a_pickpack+s.a_closing_fee)), 'bad', 100)}
+    ${row('Total Amazon fees ('+pct(amzTakePct)+')', fmt(totalFees), 'bad', 120)}
+    ${rdiv()}
+    ${row('Amazon payout', fmt(payout), '', 140)}
+    ${row('Profit (Wholesale CP)', fmt(profitW), profitW>=0?'good':'bad', 160)}
+    ${hasLoaded?row('Profit (Loaded CP)', fmt(profitL), profitL>=0?'good':'bad', 170):''}
+    <div class="kpi-row ${hasLoaded?'':'kpi-2'}" style="margin-top:14px">
+      ${kpi('Margin (WS)', pct(marginW), marginW>=15?'good':marginW>=7?'warn':'bad', 180)}
+      ${hasLoaded?kpi('Margin (Loaded)', pct(marginL), marginL>=15?'good':marginL>=7?'warn':'bad', 190):''}
+      ${kpi('Amazon Take', pct(amzTakePct), amzTakePct>25?'bad':'warn', 200)}
+    </div>
+    ${statusBadge(marginW>=20?'Healthy margin':marginW>=12?'OK — watch costs':marginW>=7?'Tight — be careful':'Danger zone', marginW>=20?'s-good':marginW>=12?'s-warn':marginW>=7?'s-warn':'s-bad')}`;
+}
+
+// ── Vendor Central ──
+function calcVC() {
+  const rrp = num($('vc_rrp').value, NaN), invoice = num($('vc_invoice').value, NaN);
+  if (!isFinite(rrp)||!isFinite(invoice)) { $('output').innerHTML=row('Error','Enter RRP and Invoice Price','bad'); return; }
+  const s = getSettings(VC_DEF);
+  const cost = num($('vc_cost').value, NaN);
+  const frontM = ((rrp-invoice)/rrp)*100;
+  const backM = s.vc_csa;
+  const totalM = frontM + backM;
+  const profitOnCost = isFinite(cost) ? invoice - cost : null;
+  const cpPct = isFinite(cost)?(cost/rrp)*100:0;
+  setMode('VENDOR CENTRAL');
+  $('output').innerHTML = `
+    ${feeBar([
+      {label:'Your invoice', pct:(invoice/rrp)*100, color:'#4d8fff'},
+      {label:'Front margin', pct:frontM, color:'#ff4d6a'},
+      ...(isFinite(cost)?[]:[])
+    ])}
+    ${rdiv()}
+    ${row('Amazon RRP', fmt(rrp), '', 0)}
+    ${row('Your Invoice Price', fmt(invoice), 'blue', 40)}
+    ${isFinite(cost)?row('Landed Cost', fmt(cost), '', 60):''}
+    ${rdiv()}
+    ${row('Front Margin', pct(frontM), frontM>=20?'good':frontM>=10?'warn':'bad', 80)}
+    ${row('Back End CSA', pct(backM), '', 100)}
+    ${row('Total Amazon Margin', pct(totalM), totalM>=38?'good':totalM>=30?'warn':'bad', 120)}
+    ${rdiv()}
+    ${profitOnCost!==null?row('Your profit per unit', fmt(profitOnCost), profitOnCost>=0?'good':'bad', 140):''}
+    <div class="kpi-row kpi-2" style="margin-top:14px">
+      ${kpi('Front Margin', pct(frontM), frontM>=20?'good':frontM>=10?'warn':'bad', 160)}
+      ${kpi('Total Take', pct(totalM), totalM>=38?'good':'warn', 180)}
+    </div>
+    ${statusBadge(totalM>=38?'Amazon target met':totalM>=30?'Below target':'Needs renegotiation', totalM>=38?'s-good':totalM>=30?'s-warn':'s-bad')}`;
+}
+
+function calcVCTarget() {
+  const rrp = num($('vc_rrp').value, NaN), target = num($('vc_target').value, NaN);
+  if (!isFinite(rrp)||!isFinite(target)) { toast('Enter RRP and target % first'); return; }
+  const s = getSettings(VC_DEF);
+  const frontNeeded = target - s.vc_csa;
+  const invoiceNeeded = rrp*(1-frontNeeded/100);
+  $('vc_invoice').value = invoiceNeeded.toFixed(2);
+  toast('Invoice auto-filled → AED '+invoiceNeeded.toFixed(2));
+  calcVC();
+}
+
+// ── Noon ──
+function calcNoon() {
+  const price = num($('noon_price').value, NaN), disc = num($('noon_discount').value, NaN);
+  if (!isFinite(price)||!isFinite(disc)) { $('output').innerHTML=row('Error','Enter price and discount','bad'); return; }
+  const dealPrice = price - (price*disc/100);
+  const saving = price - dealPrice;
+  setMode('NOON DEALS');
+  $('output').innerHTML = `
+    ${feeBar([
+      {label:'Deal price', pct:100-disc, color:'#00e5a0'},
+      {label:'Discount', pct:disc, color:'#ffb800'}
+    ])}
+    ${rdiv()}
+    ${row('Original Price', fmt(price), '', 0)}
+    ${row('Discount', pct(disc), 'warn', 40)}
+    ${row('Customer saves', fmt(saving), 'good', 80)}
+    ${rdiv()}
+    <div class="profit-hero"><div class="ph-label">Deal Price</div><div class="ph-val ph-good">${fmt(dealPrice)}</div></div>
+    <div class="kpi-row kpi-2">
+      ${kpi('Deal Price', fmt(dealPrice), 'good', 100)}
+      ${kpi('Saving', fmt(saving), 'warn', 120)}
+    </div>`;
+}
+
+// ── Profit Margin ──
+function calcProfit() {
+  const cp = num($('pm_cp').value, NaN), sp = num($('pm_sp').value, NaN);
+  if (!isFinite(cp)||!isFinite(sp)) { $('output').innerHTML=row('Error','Enter CP and SP','bad'); return; }
+  const adsPct = num($('pm_ads_pct').value, 0);
+  const otherPct = num($('pm_other_pct').value, 0);
+  const profit = sp - cp;
+  const marginPct = (profit/sp)*100;
+  const markupPct = (profit/cp)*100;
+  const adsAED = profit*adsPct/100;
+  const otherAED = profit*otherPct/100;
+  const remaining = profit - adsAED - otherAED;
+  const s = getSettings(PM_DEF);
+  const riskHigh = num($('pm_risk_high').value, s.pm_risk_high);
+  const riskMed = num($('pm_risk_med').value, s.pm_risk_med);
+  const riskOk = num($('pm_risk_ok').value, s.pm_risk_ok);
+  let rLabel, rCls, rNote;
+  if(marginPct<=riskHigh){rLabel='High risk';rCls='s-bad';rNote='Margin too thin. Any extra cost wipes you out.';}
+  else if(marginPct<=riskMed){rLabel='Caution';rCls='s-warn';rNote='Workable but tight. Control every cost.';}
+  else if(marginPct<=riskOk){rLabel='OK';rCls='s-warn';rNote='Decent. Watch your ad spend closely.';}
+  else{rLabel='Healthy';rCls='s-good';rNote='Strong margin. Room to invest and grow.';}
+  const overAlloc = (adsPct+otherPct)>100;
+  const cpBarPct = (cp/sp)*100;
+  const adBarPct = (adsAED/sp)*100;
+  const otherBarPct = (otherAED/sp)*100;
+  const remainPct = Math.max(0,(remaining/sp)*100);
+  setMode('PROFIT MARGIN');
+  $('output').innerHTML = `
+    ${heroProfit(fmt(remaining), remaining>=0?'ph-good':'ph-bad')}
+    ${feeBar([
+      {label:'Cost', pct:cpBarPct, color:'#4d8fff'},
+      {label:'Ads', pct:adBarPct, color:'#ffb800'},
+      {label:'Other', pct:otherBarPct, color:'#ff4d6a'},
+      {label:'Remaining', pct:remainPct, color:'#00e5a0'}
+    ])}
+    ${rdiv()}
+    ${row('Selling Price', fmt(sp), '', 0)}
+    ${row('Cost Price', fmt(cp), 'bad', 40)}
+    ${row('Gross Profit', fmt(profit), profit>=0?'good':'bad', 80)}
+    ${rdiv()}
+    ${adsPct>0?row('Ads budget ('+pct(adsPct)+' of profit)', fmt(adsAED), 'warn', 100):''}
+    ${otherPct>0?row('Other expenses ('+pct(otherPct)+' of profit)', fmt(otherAED), 'warn', 110):''}
+    ${row('Remaining profit', fmt(remaining), remaining>=0?'good':'bad', 120)}
+    <div class="kpi-row kpi-2" style="margin-top:14px">
+      ${kpi('Margin %', pct(marginPct), marginPct>=20?'good':marginPct>=10?'warn':'bad', 140)}
+      ${kpi('Markup %', pct(markupPct), markupPct>=25?'good':markupPct>=12?'warn':'bad', 160)}
+    </div>
+    ${statusBadge(rLabel, rCls)}
+    <p class="note" style="margin-top:8px">${rNote}</p>
+    ${overAlloc?`<div class="note-warn">⚠ Ads% + Other% exceeds 100% of profit. Reduce your allocations.</div>`:''}`;
+}
+
+// ── Keyboard ──
+document.addEventListener('keydown', e => {
+  if(e.altKey&&(e.key==='c'||e.key==='C')){e.preventDefault();toggleCalc();return;}
+  if(e.key!=='Enter'||$('calcOverlay').classList.contains('show'))return;
+  const t = document.querySelector('.tab.active')?.id;
+  if(t==='tab-noon'){calcNoon();return;}
+  if(t==='tab-profit'){calcProfit();return;}
+  const m = localStorage.getItem('fw_amz_mode')||'quick';
+  if(m==='quick')calcAmzQuick();
+  else if(m==='adv')calcAmzAdv();
+  else calcVC();
+});
+
+// ── Floating calc ──
+function toggleCalc(){$('calcOverlay').classList.toggle('show')}
+function closeCalc(){$('calcOverlay').classList.remove('show')}
+$('calcFab').addEventListener('click',toggleCalc);
+$('calcOverlay').querySelectorAll('.calc-key').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const val=btn.dataset.val,action=btn.dataset.action,d=$('calcDisplay');
+    if(action==='clear'){d.value='';return;}
+    if(action==='back'){d.value=d.value.slice(0,-1);return;}
+    if(action==='equals'){
+      try{
+        const expr=(d.value||'').replace(/[^0-9+\-*/().\s]/g,'');
+        if(!expr.trim())return;
+        const r=Function('"use strict";return('+expr+')')();
+        d.value=isFinite(r)?String(Math.round(r*1e10)/1e10):'Error';
+      }catch{d.value='Error';}
+      return;
+    }
+    if(val)d.value=(d.value||'')+val;
+  });
+});
+document.addEventListener('keydown',e=>{
+  if(!$('calcOverlay').classList.contains('show'))return;
+  if(e.key==='Escape'){e.preventDefault();closeCalc();return;}
+  if(e.key==='Enter'){e.preventDefault();$('calcOverlay').querySelector('[data-action="equals"]').click();return;}
+  if(e.key==='Backspace'){e.preventDefault();$('calcDisplay').value=$('calcDisplay').value.slice(0,-1);return;}
+  const ok='0123456789+-*/().';
+  if(ok.includes(e.key)){e.preventDefault();$('calcDisplay').value=($('calcDisplay').value||'')+e.key;}
+});
+
+// ── Init ──
+loadSettings(Q_DEF,'fw_q');
+loadSettings(A_DEF,'fw_a');
+loadSettings(VC_DEF,'fw_vc');
+loadSettings(PM_DEF,'fw_pm');
+const savedMode = localStorage.getItem('fw_amz_mode')||'quick';
+setAmzMode(savedMode);
+$('a_preset').addEventListener('change',e=>{if(e.target.value!=='CUSTOM')applyPreset(e.target.value);else saveA();});
+Object.keys(Q_DEF).forEach(k=>{if($(k)){$(k).addEventListener('change',saveQ);$(k).addEventListener('blur',saveQ);}});
+</script>
 </body>
 </html>
